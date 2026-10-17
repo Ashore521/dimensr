@@ -1,6 +1,6 @@
 # Validation record
 
-Validation date: **2026-10-17**. These are actual local runs, not expected scores. No upstream comparative benchmark or hosted CI run is claimed.
+Validation date: **2026-10-17**. These are actual runs, not expected scores. No upstream comparative benchmark is claimed. The initial release passed all four [GitHub CI jobs](https://github.com/Ashore521/dimensr/actions/runs/39024193283); later checks are available on the repository Actions page.
 
 ## Environment and commands
 
@@ -17,9 +17,9 @@ python -m build --no-isolation
 
 ## Software checks
 
-**29 tests passed.** Coverage includes invalid dimension rejection; rational/half-power units; 60 generated trees and their typed mutation/crossover variants; completion and depth/node bounds; impossible target units; dimensional constants; strict numerical domains; policy parameter updates and replay masks; unchanged global RNG during initialization; nondominated sorting and duplicate objectives; size-density effects; local Rademacher sensitivity; train-only constant fitting; unchanged search when validation labels change; seed reproducibility; budget limits; ablations; invalid inputs; failed-refit state; model JSON round trips including fractional units; tampered metadata rejection; CLI CSV training/prediction; and zero-point probes that detect singularities.
+**37 tests passed**, including eight added real-data loader/split/scaling/metadata checks. Original coverage includes invalid dimension rejection; rational/half-power units; 60 generated trees and their typed mutation/crossover variants; completion and depth/node bounds; impossible target units; dimensional constants; strict numerical domains; policy parameter updates and replay masks; unchanged global RNG during initialization; nondominated sorting and duplicate objectives; size-density effects; local Rademacher sensitivity; train-only constant fitting; unchanged search when validation labels change; seed reproducibility; budget limits; ablations; invalid inputs; failed-refit state; model JSON round trips including fractional units; tampered metadata rejection; CLI CSV training/prediction; and zero-point probes that detect singularities.
 
-Editable installation succeeded. Source distribution and wheel construction succeeded. The release wheel is additionally installed into a separate target directory and checked with the physical demo during packaging. GitHub's configured Linux/Windows CI matrix has not been run locally and must be checked after publication.
+Editable installation succeeded. Source distribution and wheel construction succeeded. The release wheel is additionally installed into a separate target directory and checked with the physical demo during packaging. GitHub separately checks Linux/Windows with Python 3.10/3.12; hosted status is distinct from the local run.
 
 The kinetic CLI demo returned `0.5*mass*velocity**2`, with validation RMSE approximately `1.44e-16`. Its model can be loaded for prediction without training again.
 
@@ -59,4 +59,4 @@ The two no-GP failures are isolated zero-domain failures despite small random-po
 - [Ablation results](../results/ablation_benchmark.json): 18 complete runs.
 - [Source hashes](../results/source_manifest.json): source/config/test fingerprints for this local release.
 
-The result files include raw model trees and coefficients for auditing numerical domains. In total, **42 benchmark runs** are recorded. Data are synthetic and noiseless, with 160 rows per generated dataset before the internal validation split. There is no application dataset in the supplied project, no large benchmark suite, no noise study and no direct PhySO/DSO comparison. Follow [EXPERIMENTS.md](EXPERIMENTS.md) before making stronger accuracy, robustness, novelty or generalization claims.
+The result files include raw model trees and coefficients for auditing numerical domains. These files contain **42 synthetic benchmark runs**, noiseless, with 160 rows per generated dataset before the internal validation split. A further **42 public real-data runs** are documented in the [real-data report](REAL_DATA_RESULTS.zh-CN.md), including independent grouped tests and prediction baselines. All 15 real-data symbolic models and all 42 held-out metric records were independently reloaded/recomputed successfully. One full-model concrete test prediction is negative despite being dimensionally valid; this limitation is retained in the report. No large benchmark suite, noise study or direct PhySO/DSO comparison has been completed. Follow [EXPERIMENTS.md](EXPERIMENTS.md) before making stronger accuracy, robustness, novelty or generalization claims.

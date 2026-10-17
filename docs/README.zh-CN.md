@@ -75,4 +75,6 @@ dimensr predict --model outputs/model.json --data new_measurements.csv --output 
 
 ## 研究定位
 
+真实数据验证已增加 UCI 翼型噪声、混凝土抗压强度和船体阻力三个实测任务，使用按工况或配方分组的独立测试集。复现命令为 `python -m pip install -e ".[experiments]"`，随后在仓库根目录运行 `python -m dimensr.real_data`。完整设置见 [固定实验协议](REAL_DATA_PROTOCOL.md)，实测指标、失败情况与解释见 [真实数据报告](REAL_DATA_RESULTS.zh-CN.md)。
+
 当前仓库把方案中的主要机制实现为可运行算法。具体数学定义、与原方案的区别及有限语法的覆盖范围见 [ALGORITHM.md](ALGORITHM.md)。Rademacher 项是局部扰动族的经验估计，不构成一般化误差上界。真正的贡献需要通过跨任务、跨噪声、足够随机种子的匹配预算实验确认；当前实测结果见 [VALIDATION.md](VALIDATION.md)。

@@ -5,7 +5,9 @@
 - Deliverable: implementation validation and a proposed comparative protocol.
 - Inputs: supplied algorithm proposal, five papers, public PhySO/DSO revisions listed in SOURCES.md.
 - Evidence status: implemented mechanisms are testable; only measurements saved in this repository's result files count as completed experiments.
-- Scope: computational symbolic regression, synthetic data; no human participants or external model API calls.
+- Scope: computational symbolic regression, synthetic and public experimental data; no human participants or external model API calls.
+
+The real-data pilot has its own [frozen protocol](REAL_DATA_PROTOCOL.md) and [measured results](REAL_DATA_RESULTS.zh-CN.md), including grouped splits, native-unit metrics, baselines and dimensional audits.
 
 ## Included checks
 

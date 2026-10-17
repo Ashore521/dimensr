@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "config": {
+    "population_size": 64,
+    "epochs": 10,
+    "gp_generations": 3,
+    "selection_generations": 6,
+    "max_nodes": 21,
+    "max_depth": 7,
+    "operators": [
+      "add",
+      "sub",
+      "mul",
+      "div",
+      "square",
+      "sqrt",
+      "log",
+      "exp"
+    ],
+    "hidden_size": 32,
+    "learning_rate": 0.003,
+    "risk_fraction": 0.3,
+    "entropy_weight": 0.01,
+    "imitation_weight": 0.1,
+    "crossover_rate": 0.5,
+    "candidate_fraction": 0.3,
+    "min_candidates": 50,
+    "complexity_weights": [
+      1.0,
+      0.5,
+      2.0
+    ],
+    "selection_complexity_weight": 0.01,
+    "size_radius": 1,
+    "rademacher_draws": 16,
+    "perturbations": 8,
+    "perturbation_radius": 0.1,
+    "constant_bound": 1000000.0,
+    "constant_restarts": 2,
+    "constant_max_nfev": 40,
+    "validation_fraction": 0.2,
+    "max_evaluations": 4000,
+    "random_state": 0,
+    "use_rnn": true,
+    "use_gp": true,
+    "use_units": true,
+    "use_size_diversity": true,
+    "use_rademacher": true
+  },
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "datasets": [
+    "airfoil",
+    "concrete",
+    "yacht"
+  ],
+  "split": "GroupShuffleSplit: test .2; validation .25 of remaining; random states seed and seed+1000",
+  "ridge_alphas": [
+    0.01,
+    0.1,
+    1,
+    10,
+    100
+  ],
+  "rf_leaves": [
+    1,
+    3,
+    5
+  ],
+  "rf_trees": 200,
+  "source_sha256": "f43076fc19aa245768b76f6dfc97b0c541ba62891566f726a8ea57760f811124",
+  "preprocessing": "SI conversion, train RMS X / std y, no centering",
+  "test_policy": "Test metrics after validation selection only; no test-driven tuning or refitting",
+  "scope": "Small grouped real-data pilot, not a powered superiority study or equal-compute comparison",
+  "fingerprint": "a3846a972712688a8135bc8151250f5f2b57c4ca795515e5b9bae71e4de66d71",
+  "frozen_at": "2026-10-17T10:53:25.186725+00:00"
+}

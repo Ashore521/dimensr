@@ -90,6 +90,23 @@ Benchmarks save per-run configurations, raw model trees, errors, evaluation coun
 
 See [validation results](docs/VALIDATION.md) for checks actually run for this release. Training progress and benchmark checkpoints are written alongside CLI outputs. An interrupted benchmark checkpoint is inspectable; automatic training resume is not implemented.
 
+### Real experimental data
+
+The repository also includes a grouped pilot on UCI Airfoil Self-Noise, Concrete
+Compressive Strength and Yacht Hydrodynamics. See the [Chinese results report](docs/REAL_DATA_RESULTS.zh-CN.md)
+and [fixed protocol](docs/REAL_DATA_PROTOCOL.md). To reproduce from the repository root:
+
+```bash
+python -m pip install -e ".[experiments]"
+python -m dimensr.real_data
+```
+
+Original downloads stay in `outputs/real_data/cache`. Per-run metrics, split indices,
+training-only scales, dimensional audits and portable models are in `results/real_data`.
+The three grouped splits are a feasibility pilot; they do not establish superiority
+to established symbolic regression systems. Dataset licenses and attribution are
+documented separately from the MIT code license.
+
 ## Attribution and license
 
 MIT license for this implementation. [PhySO](https://github.com/WassimTenachi/PhySO) is MIT licensed and [DSO](https://github.com/dso-org/deep-symbolic-optimization) is BSD-3-Clause licensed. Both are acknowledged in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), with inspected revisions and source mappings in [docs/SOURCES.md](docs/SOURCES.md). No upstream source files or paper PDFs are bundled. Use [references.bib](references.bib) to credit the underlying methods in research.
