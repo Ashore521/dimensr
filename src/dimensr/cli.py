@@ -124,4 +124,3 @@ def main(argv=None):
     except (ValueError, RuntimeError, OSError, TypeError) as exc:
         print(f"dimensr: {exc}", file=sys.stderr)
         return 2
-

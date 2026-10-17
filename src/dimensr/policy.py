@@ -75,4 +75,3 @@ class Policy(nn.Module):
         return {"policy_loss": float(loss.detach()), "policy_gradient": float(pg.detach()),
                 "imitation_loss": float(imitation.detach()), "gradient_norm": float(norm),
                 "reward_threshold": float(baseline)}
-

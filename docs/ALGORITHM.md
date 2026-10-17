@@ -80,4 +80,3 @@ The fixed normalization avoids unit-dependent raw RMSE/complexity addition and s
 - Fixed-seed replay is tested within one environment; floating point/library changes can alter search paths.
 - Selection hyperparameters must be tuned inside training/validation protocols. A validation score is not an unbiased final test score.
 - Dimensional consistency is necessary for physical plausibility but does not imply causal or physical correctness.
-

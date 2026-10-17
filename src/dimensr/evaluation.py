@@ -89,4 +89,3 @@ class Evaluator:
                               mixed_complexity(tree, rad, cfg.complexity_weights), rad)
         self.cache[tree] = candidate
         return candidate
-

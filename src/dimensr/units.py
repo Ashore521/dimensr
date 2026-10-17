@@ -32,4 +32,3 @@ def scale(a, factor):
 
 def encode(a):
     return [str(x) for x in a]
-

@@ -110,4 +110,3 @@ def test_tampered_model_rejected(tmp_path):
     path.write_text(json.dumps(obj), encoding="utf-8")
     with pytest.raises(ValueError, match="metadata"):
         DimenSRRegressor.load(path)
-

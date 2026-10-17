@@ -69,4 +69,3 @@ class SearchConfig:
             raise ValueError("complexity_weights must contain three finite nonnegative weights.")
         if not self.operators or len(set(self.operators)) != len(self.operators) or set(self.operators) - set(ARITY):
             raise ValueError(f"operators must be distinct supported names: {tuple(ARITY)}")
-

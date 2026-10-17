@@ -33,4 +33,3 @@ The proposal's formula image writes `C_mix = alpha1*N_op + alpha2*N_var + alpha3
 - Raymond et al.: title, author list and year checked against the supplied PDF; no DOI is asserted here.
 
 The standalone combination and the local sensitivity term are proposed design choices. The supplied sources establish provenance, not novelty priority. A broader related-work search and direct comparative experiments are necessary before making a publication-level novelty claim.
-

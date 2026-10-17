@@ -14,4 +14,3 @@ model = DimenSRRegressor(
 print(model.expression_)
 print(model.predict([[3.0, 2.0]]))
 model.save("force_model.json")
-

@@ -74,4 +74,3 @@ dimensr predict --model outputs/model.json --data new_measurements.csv --output 
 ## 研究定位
 
 当前仓库把方案中的主要机制实现为可运行算法。具体数学定义、与原方案的区别及有限语法的覆盖范围见 [ALGORITHM.md](ALGORITHM.md)。Rademacher 项是局部扰动族的经验估计，不构成一般化误差上界。真正的贡献需要通过跨任务、跨噪声、足够随机种子的匹配预算实验确认；当前实测结果见 [VALIDATION.md](VALIDATION.md)。
-

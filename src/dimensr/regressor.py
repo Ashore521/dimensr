@@ -265,4 +265,3 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         model.pareto_front_, model.history_, model.diagnostics_ = data["pareto_front"], data["history"], data["diagnostics"]
         model.candidate_count_ = model.diagnostics_["screened_candidates"]
         return model
-

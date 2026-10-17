@@ -91,4 +91,3 @@ See [validation results](docs/VALIDATION.md) for checks actually run for this re
 ## Attribution and license
 
 MIT license for this implementation. [PhySO](https://github.com/WassimTenachi/PhySO) is MIT licensed and [DSO](https://github.com/dso-org/deep-symbolic-optimization) is BSD-3-Clause licensed. Both are acknowledged in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), with inspected revisions and source mappings in [docs/SOURCES.md](docs/SOURCES.md). No upstream source files or paper PDFs are bundled. Use [references.bib](references.bib) to credit the underlying methods in research.
-

@@ -20,4 +20,3 @@ def crossover(tree, donor, grammar, rng):
     if not candidates:
         return tree
     return tree.replace(path, candidates[int(rng.integers(len(candidates)))])
-

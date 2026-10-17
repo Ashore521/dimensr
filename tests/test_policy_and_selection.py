@@ -65,4 +65,3 @@ def test_rademacher_is_zero_for_fixed_family_and_sensitive_to_radius():
     large = local_rademacher(tree, [2], X, 1.0, signs, directions, 0.1)
     assert fixed == 0
     assert 0 < small < large <= 1
-

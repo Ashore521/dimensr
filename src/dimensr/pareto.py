@@ -52,4 +52,3 @@ def selection_order(objectives, sizes, size_diversity=True, radius=1):
             -crowd[i], density[front[i]] if size_diversity else 0, front[i]))
         result.extend(front[i] for i in local)
     return result
-

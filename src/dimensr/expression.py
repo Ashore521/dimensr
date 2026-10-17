@@ -119,4 +119,3 @@ class Node:
     @classmethod
     def from_dict(cls, data):
         return cls(data["token"], tuple(cls.from_dict(c) for c in data["children"]), unit(data["units"]))
-

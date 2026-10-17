@@ -147,4 +147,3 @@ class Grammar:
                 remaining -= child.size
         visit(tree, self.max_nodes, self.max_depth, self.bos)
         return result
-

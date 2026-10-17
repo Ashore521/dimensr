@@ -31,4 +31,3 @@ These commands are a development-scale run. Ablation flags retain the same maxim
 7. Inspect recovered equations, domains and dimensional validity. Compare algebraic equivalence with explicit assumptions; use out-of-domain numerical checks only as supporting evidence.
 
 Upstream baselines have not been run by the development test suite. Do not relabel the internal `no_rnn` or `no_units` variants as PhySO or DSO. Their architectures and search schedules differ.
-

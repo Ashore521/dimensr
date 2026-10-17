@@ -8,4 +8,3 @@ DimenSR is a new implementation of the workflow described in the supplied design
 Consult [docs/SOURCES.md](docs/SOURCES.md) and [references.bib](references.bib) for method-level attribution and differences. The license copies acknowledge the reviewed projects; they do not change the independent implementation's MIT license. Future copying or adaptation of upstream source must retain its applicable notices.
 
 NumPy, SciPy, PyTorch, SymPy and scikit-learn are installed dependencies with their own licenses. Paper PDFs and the private design document are not redistributed.
-

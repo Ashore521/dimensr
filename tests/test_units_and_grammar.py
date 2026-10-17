@@ -61,4 +61,3 @@ def test_numeric_domains_are_not_silently_protected():
 def test_tree_json_preserves_fractional_units():
     root = Node("sqrt", (Node("x0", units=L),), unit(["1/2", 0, 0, 0, 0, 0, 0]))
     assert Node.from_dict(root.to_dict()) == root
-

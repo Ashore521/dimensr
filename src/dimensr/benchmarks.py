@@ -98,4 +98,3 @@ def run_benchmarks(config, cases=CASES, seeds=(0,), variants=("full",), noise=0.
             "environment": {"python": platform.python_version(), "platform": platform.platform(),
                             "numpy": np.__version__, "scipy": scipy.__version__, "torch": torch.__version__},
             "results": rows}
-
