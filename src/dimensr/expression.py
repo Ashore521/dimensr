@@ -116,6 +116,25 @@ class Node:
         return {"token": self.token, "units": encode(self.units),
                 "children": [c.to_dict() for c in self.children]}
 
+    def canonical(self, constants=None):
+        """Order commutative operands and reorder their independent coefficients.
+
+        No cancellation, reassociation or domain-changing identities are used.
+        """
+        it = iter(np.ones(self.n_constants) if constants is None else constants)
+
+        def visit(node):
+            if not node.children:
+                return node, [next(it)] if node.token.startswith("c") else []
+            parts = [visit(child) for child in node.children]
+            if node.token in ("add", "mul"):
+                parts.sort(key=lambda pair: repr(pair[0]))
+            return (Node(node.token, tuple(p[0] for p in parts), node.units),
+                    [v for _, values in parts for v in values])
+
+        root, values = visit(self)
+        return root, np.asarray(values, dtype=float)
+
     @classmethod
     def from_dict(cls, data):
         return cls(data["token"], tuple(cls.from_dict(c) for c in data["children"]), unit(data["units"]))

@@ -15,13 +15,15 @@ class Policy(nn.Module):
             self.embedding = nn.Embedding(n_tokens + 1, 12)
             self.rnn = nn.GRU(33, hidden_size, batch_first=True)
             self.head = nn.Linear(hidden_size, n_tokens)
+            self.production_query = nn.Linear(hidden_size + 12, 16)
         self.generator = torch.Generator().manual_seed(seed)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate)
 
-    def forward(self, previous, parents, contexts, hidden=None):
+    def forward(self, previous, parents, contexts, hidden=None, return_states=False):
         inputs = torch.cat((self.embedding(previous), self.embedding(parents), contexts), dim=-1)
         output, hidden = self.rnn(inputs, hidden)
-        return self.head(output), hidden
+        result = (self.head(output), hidden)
+        return result + (output,) if return_states else result
 
     @torch.no_grad()
     def sample_step(self, previous, parent, context, mask, hidden):
@@ -30,6 +32,12 @@ class Policy(nn.Module):
         logits = logits[0, 0].masked_fill(~torch.as_tensor(mask), -1e9)
         token = torch.multinomial(torch.softmax(logits, -1), 1, generator=self.generator)
         return int(token.item()), hidden
+
+    @torch.no_grad()
+    def sample_production(self, hidden, features, token):
+        state = torch.cat((hidden[-1, 0], self.embedding(torch.tensor(token))))
+        logits = torch.as_tensor(features) @ self.production_query(state) / 4
+        return int(torch.multinomial(torch.softmax(logits, -1), 1, generator=self.generator).item())
 
     def log_probs(self, traces):
         batch = len(traces)
@@ -48,10 +56,26 @@ class Policy(nn.Module):
             contexts[i, :n] = torch.tensor(trace.contexts)
             masks[i, :n] = torch.as_tensor(np.asarray(trace.masks))
             active[i, :n] = 1
-        logits, _ = self(previous, parents, contexts)
+        logits, _, states = self(previous, parents, contexts, return_states=True)
         logp = torch.log_softmax(logits.masked_fill(~masks, -1e9), -1)
         selected = logp.gather(-1, tokens.unsqueeze(-1)).squeeze(-1)
         entropy = -(logp.exp() * logp).sum(-1)
+        if any(trace.production_features for trace in traces):
+            max_choices = max(len(f) for t in traces for f in t.production_features)
+            features = torch.zeros((batch, length, max_choices, 16))
+            legal = torch.zeros((batch, length, max_choices), dtype=torch.bool)
+            legal[:, :, 0] = True
+            chosen = torch.zeros((batch, length), dtype=torch.long)
+            for i, trace in enumerate(traces):
+                for j, f in enumerate(trace.production_features):
+                    features[i, j, :len(f)] = torch.as_tensor(f)
+                    legal[i, j, :len(f)] = True
+                    chosen[i, j] = trace.production_indices[j]
+            query = self.production_query(torch.cat((states, self.embedding(tokens)), dim=-1))
+            split_logits = (features * query.unsqueeze(2)).sum(-1) / 4
+            split_logp = torch.log_softmax(split_logits.masked_fill(~legal, -1e9), -1)
+            selected = selected + split_logp.gather(-1, chosen.unsqueeze(-1)).squeeze(-1)
+            entropy = entropy - (split_logp.exp() * split_logp).sum(-1)
         return (selected * active).sum(-1), (entropy * active).sum(-1)
 
     def update(self, traces, rewards, elite_traces=(), risk_fraction=0.3,

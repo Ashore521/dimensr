@@ -68,11 +68,13 @@ By default, `fit` makes a reproducible 80/20 split. Constants, search rewards an
 ## What is implemented
 
 - Exact rational unit checking, completion-aware generation masks and same-unit subtree replacement.
-- GRU token probabilities trained by a risk-seeking policy gradient; separate GP elite imitation.
-- Typed mutation/crossover and bounded nonlinear least-squares fitting of constants.
-- Top 30% candidate screening, with a requested minimum of 50 unique valid trees, limited by what search actually discovers.
+- GRU token and legal unit-split probabilities trained by a risk-seeking policy gradient; separate, diverse GP elite imitation.
+- Typed mutation/crossover with inherited constants, additive seeds, persistent elites and bounded duplicate retries.
+- Domain-aware constant starts, exact affine coefficient subproblems and bounded elite polishing.
+- Accuracy/size/Pareto-aware candidate screening, retaining a requested 30% or at least 50 unique valid trees when available.
 - NSGA-II over training error and mixed complexity; optional size-density adjustment of crowding distance.
-- A reproducible Monte Carlo estimate over an explicit finite local perturbation family. This is a heuristic complexity term, **not a certified generalization bound**.
+- A reproducible Rademacher estimate for an explicit local Jacobian output ball, normalized for mixed-complexity selection. This is **not a certified generalization bound for symbolic regression**.
+- Reserved NSGA-II evaluation budget; optional output bounds and training-only numerical-domain probes.
 - Validation-based final model selection, portable JSON models, CLI, ablations, tests and CI.
 
 Generation uses a finite unit catalog built from supplied units and a documented one-step closure. Some dimensionally legal expressions are outside this catalog. Supply `extra_units` or change search limits when needed; see [algorithm details](docs/ALGORITHM.md). Unsupported numerical domains are rejected rather than rewritten using protected operators.
@@ -98,12 +100,18 @@ and [fixed protocol](docs/REAL_DATA_PROTOCOL.md). To reproduce from the reposito
 
 ```bash
 python -m pip install -e ".[experiments]"
-python -m dimensr.real_data
+python -m dimensr.real_data --output outputs/new_real_data
+python examples/compare_optimization.py run --output outputs/my_optimization --workers 4
+python examples/compare_optimization.py verify --output outputs/my_optimization
 ```
 
 Original downloads stay in `outputs/real_data/cache`. Per-run metrics, split indices,
 training-only scales, dimensional audits and portable models are in `results/real_data`.
-The three grouped splits are a feasibility pilot; they do not establish superiority
+The original pilot is frozen at commit `5492122`; rerunning it with the current
+algorithm requires a new output directory and does not reproduce the old search.
+The 0.2 comparison uses the same splits and seeds, with all three capacity variants
+declared before new test scoring. See [optimization results](docs/OPTIMIZATION_RESULTS.zh-CN.md).
+These reused test sets support exploratory comparison. The three grouped splits do not establish superiority
 to established symbolic regression systems. Dataset licenses and attribution are
 documented separately from the MIT code license.
 

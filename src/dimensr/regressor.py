@@ -1,5 +1,6 @@
 """Public estimator and the two-stage neural/GP -> NSGA-II search."""
 from dataclasses import asdict, replace
+from collections import Counter
 import json
 from pathlib import Path
 import time
@@ -13,8 +14,9 @@ from .expression import Node
 from .grammar import Grammar
 from .policy import Policy
 from .evaluation import Evaluator, Candidate
-from .genetics import mutate, crossover
-from .pareto import fronts, selection_order
+from .genetics import fitted_offspring
+from .pareto import first_front, selection_order
+from .seeding import typed_seeds
 
 
 def _unique(candidates):
@@ -28,6 +30,27 @@ def _ordered(candidates, cfg, multiobjective):
     indices = selection_order([(c.train_nrmse, c.complexity) for c in candidates],
                               [c.tree.size for c in candidates], cfg.use_size_diversity, cfg.size_radius)
     return [candidates[i] for i in indices]
+
+
+def _size_elites(candidates):
+    best = {}
+    for candidate in sorted(candidates, key=lambda c: c.train_rmse):
+        best.setdefault(candidate.tree.size, candidate)
+    return [best[size] for size in sorted(best)]
+
+
+def _diverse(candidates, limit, fraction=0.25):
+    ranked = sorted(_unique(candidates), key=lambda c: (c.train_rmse, c.tree.size))
+    sizes = _size_elites(ranked)
+    count = min(len(sizes), max(1, int(limit * fraction)))
+    protected = [sizes[i] for i in np.linspace(0, len(sizes) - 1, count, dtype=int)] if count else []
+    return sorted(_unique(protected + ranked)[:limit], key=lambda c: (c.train_rmse, c.tree.size))
+
+
+def _prescreen(archive, limit):
+    front = first_front([(c.train_nrmse, c.complexity) for c in archive])
+    diverse = _diverse(archive, max(1, limit // 2), 0.5)
+    return _unique(diverse + [archive[i] for i in front] + archive)[:limit]
 
 
 class DimenSRRegressor(RegressorMixin, BaseEstimator):
@@ -86,7 +109,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
             self.validation_indices_ = None
         units = physical_features if cfg.use_units else (ZERO,) * n_features
         target = physical_target if cfg.use_units else ZERO
-        constants = physical_constants if cfg.use_units else (ZERO,) * len(physical_constants)
+        constants = tuple(dict.fromkeys(physical_constants)) if cfg.use_units else ((ZERO,) if physical_constants else ())
         grammar = Grammar(units, target, constants, cfg.operators, cfg.max_nodes, cfg.max_depth,
                           extra if cfg.use_units else ())
         evaluator = Evaluator(X, y, cfg)
@@ -94,45 +117,79 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         self.history_ = []
         self.policy_ = policy
         start = time.monotonic()
+        stage_one_limit = (max(1, int(cfg.max_evaluations * (1 - cfg.selection_budget_fraction)))
+                           if cfg.use_gp and cfg.selection_generations else cfg.max_evaluations)
+        variation_attempts, variation_novel = Counter(), Counter()
+        previous_evaluations = 0
 
         def record(phase, step, population, update=None):
+            nonlocal previous_evaluations
+            best = min(population, key=lambda c: c.train_rmse)
             entry = {"phase": phase, "step": step, "evaluations": evaluator.calls,
+                     "new_evaluations": evaluator.calls - previous_evaluations,
                      "constant_nfev": evaluator.constant_nfev,
                      "constant_residual_calls": evaluator.constant_residual_calls,
                      "valid_candidates": sum(c is not None for c in evaluator.cache.values()),
                      "best_train_rmse": min(c.train_rmse for c in population),
                      "unique_sizes": len({c.tree.size for c in population}),
+                     "best_expression": str(best.tree.sympy(best.constants, names)),
                      "elapsed_seconds": time.monotonic() - start}
+            previous_evaluations = evaluator.calls
             if update:
                 entry.update(update)
             self.history_.append(entry)
             if callback:
                 callback(entry.copy())
 
-        def evolve(population, multiobjective):
+        def evolve(population, multiobjective, limit):
             ranked = _ordered(population, cfg, multiobjective)
             children = []
             for _ in range(cfg.population_size):
-                if evaluator.calls >= cfg.max_evaluations:
+                if evaluator.calls >= limit:
                     break
-                # Tournament on rank/crowding order, or RMSE order in stage one.
-                parent = ranked[int(rng.integers(len(ranked), size=3).min())]
-                if rng.random() < cfg.crossover_rate:
+                for _ in range(cfg.variation_attempts):
+                    parent = ranked[int(rng.integers(len(ranked), size=3).min())]
                     donor = ranked[int(rng.integers(len(ranked), size=3).min())]
-                    tree = crossover(parent.tree, donor.tree, grammar, rng)
-                else:
-                    tree = mutate(parent.tree, grammar, rng)
+                    if donor.tree == parent.tree and len(ranked) > 1:
+                        alternatives = [c for c in ranked if c.tree != parent.tree]
+                        donor = alternatives[int(rng.integers(len(alternatives)))]
+                    term = basis[int(rng.integers(len(basis)))] if basis and rng.random() < 0.2 else None
+                    tree, warm, operator = fitted_offspring(parent, donor, grammar, rng,
+                                                            cross=rng.random() < cfg.crossover_rate, term=term)
+                    tree, warm = tree.canonical(warm)
+                    variation_attempts[operator] += 1
+                    if tree in evaluator.cache:
+                        continue
+                    variation_novel[operator] += 1
+                    candidate = evaluator(tree, warm)
+                    if candidate is not None:
+                        children.append(candidate)
+                    break
+            survivors = (_ordered(population + children, cfg, True)[:cfg.population_size] if multiobjective else
+                         _diverse(population + children, cfg.population_size, cfg.elite_fraction))
+            return survivors, children
+
+        population, basis = [], []
+        if cfg.linear_seeds:
+            seed_limit = min(stage_one_limit // 4, cfg.population_size * 3)
+            for tree in typed_seeds(grammar, rng):
+                if evaluator.calls >= seed_limit:
+                    break
                 candidate = evaluator(tree)
                 if candidate is not None:
-                    children.append(candidate)
-            survivors = _ordered(population + children, cfg, multiobjective)[:cfg.population_size]
-            return survivors, children
+                    population.append(candidate)
+                    if tree.size <= max(7, cfg.max_nodes // 3) and any(n.token.startswith("x") for _, n in tree.walk()):
+                        basis.append(candidate)
+            population = _diverse(population, cfg.population_size, cfg.elite_fraction)
+            if population:
+                record("initialization", 0, population)
 
         # Stage one: repeated neural population seeding and open GP search.
         for epoch in range(cfg.epochs):
             sampled, traces, rewards = [], [], []
+            before_neural = evaluator.calls
             for _ in range(cfg.population_size):
-                if evaluator.calls >= cfg.max_evaluations:
+                if evaluator.calls >= stage_one_limit:
                     break
                 tree, trace = grammar.generate(rng, policy)
                 candidate = evaluator(tree)
@@ -140,26 +197,32 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
                 rewards.append(0.0 if candidate is None else 1 / (1 + candidate.train_nrmse))
                 if candidate is not None:
                     sampled.append(candidate)
-            population = _ordered(sampled, cfg, False)
+            neural_unique = evaluator.calls - before_neural
+            carried = _diverse(population, max(1, int(cfg.population_size * cfg.elite_fraction)))
+            population = _diverse(sampled + carried, cfg.population_size, cfg.elite_fraction)
             if not population:
                 population = _ordered([c for c in evaluator.cache.values() if c is not None], cfg, False)[:cfg.population_size]
             if not population:
                 raise RuntimeError("No numerically valid candidates. Check units, domains, operators and search budget.")
             if cfg.use_gp:
                 for _ in range(cfg.gp_generations):
-                    population, _ = evolve(population, False)
-            update = None
-            if policy:
-                elites = _ordered(population, cfg, False)[:max(1, int(cfg.population_size * cfg.risk_fraction))]
-                update = policy.update(traces, rewards, [grammar.trace(c.tree) for c in elites],
+                    population, _ = evolve(population, False, stage_one_limit)
+            update = {"neural_proposals": len(traces), "neural_unique": neural_unique,
+                      "neural_valid": len(sampled),
+                      "neural_best_nrmse": min((c.train_nrmse for c in sampled), default=None)}
+            if policy and traces:
+                elites = _diverse([c for c in evaluator.cache.values() if c is not None],
+                                  max(1, int(cfg.population_size * cfg.risk_fraction)))
+                update.update(policy.update(traces, rewards, [grammar.trace(c.tree) for c in elites],
                                        cfg.risk_fraction, cfg.entropy_weight, cfg.imitation_weight)
+                              )
             record("neural_gp", epoch, population, update)
-            if evaluator.calls >= cfg.max_evaluations:
+            if evaluator.calls >= stage_one_limit:
                 break
 
         archive = _ordered([c for c in evaluator.cache.values() if c is not None], cfg, False)
         requested = max(cfg.min_candidates, int(np.ceil(cfg.candidate_fraction * len(archive))))
-        seeds = archive[:requested]
+        seeds = _prescreen(archive, requested)
         if len(seeds) < cfg.min_candidates:
             warnings.warn(f"Only {len(seeds)} unique valid candidates found; requested minimum is {cfg.min_candidates}. "
                           "Increase the search budget for research experiments.", UserWarning)
@@ -169,13 +232,19 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         # Stage two: accuracy/complexity NSGA-II, with size-aware truncation.
         if cfg.use_gp:
             for generation in range(cfg.selection_generations):
-                population, children = evolve(population, True)
+                population, children = evolve(population, True, cfg.max_evaluations)
                 pool.extend(children)
                 record("nsga2", generation, population)
                 if evaluator.calls >= cfg.max_evaluations:
                     break
         pool = _unique(pool)
-        front = fronts([(c.train_nrmse, c.complexity) for c in pool])[0]
+        for candidate in _diverse(pool, cfg.polish_candidates) if cfg.polish_candidates else []:
+            if candidate.tree.n_constants:
+                evaluator(candidate.tree, candidate.constants, refine=True)
+        pool = [evaluator.cache[c.tree] for c in pool]
+        if cfg.polish_candidates:
+            record("polish", 0, pool)
+        front = first_front([(c.train_nrmse, c.complexity) for c in pool])
         pareto = sorted([pool[i] for i in front], key=lambda c: (c.complexity, c.train_rmse))
         valid_front, scores, validation = [], [], []
         # Validation is first accessed for model scoring only after search has finished.
@@ -183,7 +252,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
             pred = candidate.tree.evaluate(X_val, candidate.constants)
             with np.errstate(all="ignore"):
                 rmse = float(np.sqrt(np.mean((pred - y_val) ** 2)))
-            if np.isfinite(rmse):
+            if np.isfinite(rmse) and evaluator.admissible(pred):
                 valid_front.append(candidate)
                 validation.append(rmse)
                 scores.append(rmse / evaluator.scale + cfg.selection_complexity_weight * candidate.complexity / cfg.max_nodes)
@@ -208,6 +277,10 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
                              "pareto_count": len(pareto), "validation_valid_pareto_count": len(valid_front),
                              "training_rows": len(X), "validation_rows": len(X_val),
                              "budget_exhausted": evaluator.calls >= cfg.max_evaluations,
+                             "stage_one_limit": stage_one_limit,
+                             "variation_attempts": dict(variation_attempts), "variation_novel": dict(variation_novel),
+                             "output_bounds": cfg.output_bounds,
+                             **evaluator.diagnostics(),
                              "elapsed_seconds": time.monotonic() - start}
         return self
 
@@ -219,12 +292,16 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         values = self.best_.tree.evaluate(X, self.best_.constants)
         if not np.isfinite(values).all():
             raise ValueError("Expression is undefined on these inputs (division, logarithm, square root or overflow).")
+        if self.config_.output_bounds is not None:
+            lo, hi = self.config_.output_bounds
+            if lo is not None and np.any(values < lo) or hi is not None and np.any(values > hi):
+                raise ValueError("Expression violates the configured output bounds on these inputs.")
         return values
 
     def save(self, path):
         """Save an inference model as portable JSON, without executable pickle data."""
         check_is_fitted(self, "best_")
-        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.1.0",
+        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.2.0",
                 "config": asdict(self.config_), "n_features": self.n_features_in_,
                 "feature_names": self.feature_names_, "feature_units": [encode(u) for u in self.feature_units_],
                 "target_units": encode(self.target_units_), "constant_units": [encode(u) for u in self.constant_units_],
@@ -259,7 +336,8 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
                 index = int(node.token[1:])
                 if index >= len(declared) or node.units != declared[index]:
                     raise ValueError("Terminal units or feature index are inconsistent.")
-        model.best_ = Candidate(tree, constants, b["train_rmse"], b["train_nrmse"], b["complexity"], b["rademacher"])
+        model.best_ = Candidate(tree, constants, b["train_rmse"], b["train_nrmse"], b["complexity"], b["rademacher"],
+                                b.get("rademacher_complexity", 0.0))
         model.expression_ = tree.sympy(constants, model.feature_names_)
         model.validation_rmse_ = data["validation_rmse"]
         model.pareto_front_, model.history_, model.diagnostics_ = data["pareto_front"], data["history"], data["diagnostics"]

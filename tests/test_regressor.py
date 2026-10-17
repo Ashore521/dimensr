@@ -45,7 +45,8 @@ def test_constant_optimization():
     tree = Node("add", (Node("mul", (Node("c0"), Node("x0"))), Node("c0")))
     fit = Evaluator(X, 2.5 * X[:, 0] - 0.7, config())(tree)
     assert fit.train_rmse < 1e-8
-    np.testing.assert_allclose(fit.constants, [2.5, -0.7], atol=1e-8)
+    _, expected = tree.canonical([2.5, -0.7])
+    np.testing.assert_allclose(fit.constants, expected, atol=1e-8)
 
 
 def test_validation_does_not_change_search_or_fitted_constants():

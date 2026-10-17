@@ -1,0 +1,22 @@
+{
+  "common": {
+    "population_size": 64,
+    "gp_generations": 3,
+    "operators": ["add", "sub", "mul", "div", "square", "sqrt", "log", "exp"],
+    "constant_restarts": 2,
+    "constant_max_nfev": 40,
+    "domain_restarts": 4,
+    "polish_candidates": 8,
+    "polish_max_nfev": 160,
+    "rademacher_draws": 64,
+    "domain_probe_count": 64
+  },
+  "variants": {
+    "optimized_21": {"epochs": 10, "selection_generations": 6, "max_nodes": 21, "max_depth": 7, "max_evaluations": 4000},
+    "optimized_31": {"epochs": 24, "selection_generations": 12, "max_nodes": 31, "max_depth": 9, "max_evaluations": 8000},
+    "optimized_41": {"epochs": 24, "selection_generations": 12, "max_nodes": 41, "max_depth": 9, "max_evaluations": 8000}
+  },
+  "physical_bounds": {"airfoil": null, "concrete": [0, null], "yacht": [0, null]},
+  "include_normalizers": true,
+  "primary_variant": "optimized_41"
+}

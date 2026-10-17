@@ -20,4 +20,4 @@ git push -u origin main
 
 If using an existing repository, inspect its contents and history first. Do not overwrite or force-push unrelated work. GitHub Actions should run the included Windows/Linux test matrix after publication; successful local tests do not imply hosted CI has already passed.
 
-The built wheel can be installed directly with `python -m pip install path/to/dimensr-0.1.0-py3-none-any.whl`. Publishing to PyPI is a separate operation and has not been performed. The confirmed repository URL is included in package metadata and CITATION.cff.
+The built wheel can be installed directly with `python -m pip install path/to/dimensr-0.2.0-py3-none-any.whl`. Publishing to PyPI is a separate operation and has not been performed. The confirmed repository URL is included in package metadata and CITATION.cff.

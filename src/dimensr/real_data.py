@@ -173,10 +173,13 @@ def scaling(X, y, train, spec):
                                 "centering": False, "scale_fit_rows": train.tolist()}
 
 
-def constant_dimensions(spec):
-    """Permit an intercept and a dimensional slope for each distinct input type."""
+def constant_dimensions(spec, include_normalizers=False):
+    """Declare intercept/slopes and, optionally, inverse-unit reference scales."""
     target = unit(spec["target_units"])
-    return tuple(dict.fromkeys([ZERO, target] + [sub(target, unit(u)) for u in spec["feature_units"]]))
+    dims = [ZERO, target] + [sub(target, unit(u)) for u in spec["feature_units"]]
+    if include_normalizers:
+        dims += [sub(ZERO, unit(u)) for u in spec["feature_units"]]
+    return tuple(dict.fromkeys(dims))
 
 
 def audit_tree(tree, feature_units, target_units, constant_units):
@@ -203,19 +206,20 @@ def metrics(y, prediction, train_std):
             "r2": float(r2_score(y, prediction)), "nrmse_train_std": rmse / train_std}
 
 
-def fit_symbolic(X, y, split, spec, config, use_units, path):
+def fit_symbolic(X, y, split, spec, config, use_units, path, *, include_normalizers=False):
     cfg = replace(config, use_units=use_units)
     physical_features = tuple(unit(u) for u in spec["feature_units"])
-    physical_constants = constant_dimensions(spec)
+    physical_constants = constant_dimensions(spec, include_normalizers)
     features = physical_features if use_units else (ZERO,) * len(physical_features)
     target = unit(spec["target_units"]) if use_units else ZERO
-    constants = physical_constants if use_units else (ZERO,) * len(physical_constants)
+    constants = physical_constants if use_units else ((ZERO,) if physical_constants else ())
     audited = {"unique_evaluated_trees": 0, "checked_calls": 0, "violations": 0,
                "physical_units_enabled": use_units,
                "nontrivial_physical_units": any(u != ZERO for u in physical_features)}
 
     class AuditedEvaluator(Evaluator):
-        def __call__(self, tree):
+        def __call__(self, tree, initial_constants=None, *, refine=False):
+            tree, warm = tree.canonical(initial_constants)
             audited["checked_calls"] += 1
             if tree not in self.cache and self.calls < self.config.max_evaluations:
                 try:
@@ -224,14 +228,22 @@ def fit_symbolic(X, y, split, spec, config, use_units, path):
                     audited["violations"] += 1
                     raise
                 audited["unique_evaluated_trees"] += 1
-            return super().__call__(tree)
+            return super().__call__(tree, warm if initial_constants is not None else None, refine=refine)
 
     model = DimenSRRegressor(cfg, physical_features, unit(spec["target_units"]),
                             physical_constants, spec["names"])
+    progress_path = path.with_suffix(".progress.json")
+
+    def progress(entry):
+        write_json(progress_path, entry)
+        print(f"PROGRESS {path.stem}: {entry['phase']} {entry['step']} "
+              f"new={entry['new_evaluations']} total={entry['evaluations']} "
+              f"train_rmse={entry['best_train_rmse']:.5g}", flush=True)
+
     with patch("dimensr.regressor.Evaluator", AuditedEvaluator), warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always", UserWarning)
         model.fit(X[split["train"]], y[split["train"]],
-                  X_val=X[split["validation"]], y_val=y[split["validation"]])
+                  X_val=X[split["validation"]], y_val=y[split["validation"]], callback=progress)
     path.parent.mkdir(parents=True, exist_ok=True)
     model.save(path)
     # Re-evaluate after portable serialization; test labels are not accessed here.

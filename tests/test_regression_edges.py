@@ -37,7 +37,8 @@ def test_domain_invalid_tree_and_fitting_cost_are_recorded():
     assert evaluator(Node("log", (Node("x0"),))) is None
     fitted = evaluator(Node("mul", (Node("c0"), Node("x0"))))
     assert fitted is not None
-    assert evaluator.constant_residual_calls >= evaluator.constant_nfev > 0
+    assert evaluator.constant_residual_calls > 0
+    assert evaluator.linear_fits == 1
 
 
 def test_benchmark_probes_expose_removable_singularity():

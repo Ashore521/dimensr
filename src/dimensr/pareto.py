@@ -2,6 +2,23 @@
 import numpy as np
 
 
+def first_front(objectives):
+    """Two-objective first front in O(N log N), including exact duplicates."""
+    values = np.asarray(objectives, dtype=float)
+    if values.ndim != 2 or values.shape[1] != 2 or not np.isfinite(values).all():
+        raise ValueError("Expected finite pairs of objectives.")
+    order = np.lexsort((values[:, 1], values[:, 0]))
+    result, best, previous_error, same_error_best = [], np.inf, None, np.inf
+    for i in order:
+        error, complexity = values[i]
+        if error != previous_error:
+            best = min(best, same_error_best)
+            previous_error, same_error_best = error, complexity
+        if complexity == same_error_best and complexity < best:
+            result.append(int(i))
+    return result
+
+
 def fronts(objectives):
     values = np.asarray(objectives, dtype=float)
     if values.ndim != 2 or not np.isfinite(values).all():

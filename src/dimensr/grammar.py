@@ -1,5 +1,5 @@
 """Finite typed grammar with exact completion costs and explicit search bounds."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from fractions import Fraction
 import numpy as np
 from .expression import ARITY, Node
@@ -18,6 +18,8 @@ class Trace:
     parents: list
     contexts: list
     masks: list
+    production_features: list = field(default_factory=list)
+    production_indices: list = field(default_factory=list)
 
 
 class Grammar:
@@ -108,11 +110,16 @@ class Grammar:
                 token = int(rng.choice(list(choices)))
             else:
                 token, hidden = policy.sample_step(previous, parent, context, mask, hidden)
-            p = choices[token][int(rng.integers(len(choices[token])))]
+            features = self.production_features(choices[token], height)
+            choice = (policy.sample_production(hidden, features, token) if policy is not None else
+                      int(rng.integers(len(choices[token]))))
+            p = choices[token][choice]
             trace.tokens.append(token)
             trace.parents.append(parent)
             trace.contexts.append(context)
             trace.masks.append(mask)
+            trace.production_features.append(features)
+            trace.production_indices.append(choice)
             children = []
             remaining -= 1
             for i, child_units in enumerate(p.children):
@@ -123,6 +130,14 @@ class Grammar:
             return Node(p.token, tuple(children), required)
 
         return visit(units, budget, depth, self.bos), trace
+
+    def production_features(self, productions, depth):
+        features = np.zeros((len(productions), 16), dtype=np.float32)
+        for i, production in enumerate(productions):
+            for j, dims in enumerate(production.children):
+                features[i, j * 7:(j + 1) * 7] = [float(u) for u in dims]
+                features[i, 14 + j] = self.cost[depth - 1][dims] / self.max_nodes
+        return features
 
     def trace(self, tree):
         result = Trace([], [], [], [])
@@ -140,6 +155,8 @@ class Grammar:
             result.contexts.append([float(u) for u in node.units] +
                                    [budget / self.max_nodes, depth / self.max_depth])
             result.masks.append(mask)
+            result.production_features.append(self.production_features(choices[token], depth))
+            result.production_indices.append(choices[token].index(p))
             remaining = budget - 1
             for i, child in enumerate(node.children):
                 reserved = sum(self.cost[depth - 1][c.units] for c in node.children[i + 1:])

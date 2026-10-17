@@ -4,6 +4,11 @@ Defined on 2026-10-17 before inspecting this pilot's test scores. This is a loca
 versioned protocol, not an externally preregistered study. The executable protocol
 and its freeze time/hash are saved in `results/real_data/protocol.json`.
 
+This is the historical **0.1** protocol at commit `5492122`. Current algorithm
+changes require a new output directory. The follow-up in
+`results/optimization_v2/protocol.json` freezes the new configurations and preserves
+these original splits/results; it is an exploratory reuse of inspected test sets.
+
 ## Data and attribution
 
 Download the original archives from the UCI Machine Learning Repository:
