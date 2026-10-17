@@ -7,6 +7,8 @@ DimenSR 是按项目中的“量纲约束 RNN-GP”设计方案实现的符号�
 在仓库目录建立 Python 3.10 或以上版本的虚拟环境。Windows PowerShell：
 
 ```powershell
+git clone https://github.com/Ashore521/dimensr.git
+cd dimensr
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install --upgrade pip
 .venv\Scripts\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cpu

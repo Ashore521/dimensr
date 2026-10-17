@@ -11,13 +11,13 @@ git status --short
 git ls-files
 ```
 
-Create an empty public GitHub repository under the intended account, then push this directory's `main` branch. For example, after replacing `OWNER` with your account:
+The confirmed publication destination is [Ashore521/dimensr](https://github.com/Ashore521/dimensr), a public repository. For a fresh checkout without a configured remote, use:
 
 ```bash
-git remote add origin https://github.com/OWNER/dimensr.git
+git remote add origin https://github.com/Ashore521/dimensr.git
 git push -u origin main
 ```
 
 If using an existing repository, inspect its contents and history first. Do not overwrite or force-push unrelated work. GitHub Actions should run the included Windows/Linux test matrix after publication; successful local tests do not imply hosted CI has already passed.
 
-The built wheel can be installed directly with `python -m pip install path/to/dimensr-0.1.0-py3-none-any.whl`. Publishing to PyPI is a separate operation and has not been performed. Set the repository URL in package metadata after its destination is confirmed.
+The built wheel can be installed directly with `python -m pip install path/to/dimensr-0.1.0-py3-none-any.whl`. Publishing to PyPI is a separate operation and has not been performed. The confirmed repository URL is included in package metadata and CITATION.cff.

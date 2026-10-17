@@ -8,9 +8,11 @@ DimenSR discovers analytic relationships from numeric data and supplied physical
 
 ## Install
 
-Python 3.10+ is required. A CPU is sufficient. From this repository:
+Python 3.10+ is required. A CPU is sufficient. Clone the repository and install:
 
 ```bash
+git clone https://github.com/Ashore521/dimensr.git
+cd dimensr
 python -m venv .venv
 # Windows PowerShell:
 .venv\Scripts\Activate.ps1
