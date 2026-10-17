@@ -9,6 +9,12 @@
 
 The real-data pilot has its own [frozen protocol](REAL_DATA_PROTOCOL.md) and [measured results](REAL_DATA_RESULTS.zh-CN.md), including grouped splits, native-unit metrics, baselines and dimensional audits.
 
+The subsequent [acceptance protocol](ACCEPTANCE_PROTOCOL.zh-CN.md) and
+[results](ACCEPTANCE_RESULTS.zh-CN.md) add a pinned upstream PhySO comparison,
+eight Nguyen/Feynman equations and five internal ablations. They preserve the
+0.2.0 algorithm and separate fit from holdout scoring; this is a limited pilot,
+not the publication-scale study below.
+
 ## Included checks
 
 Four generated tasks cover product units (`force`), a fitted coefficient and square (`kinetic`), a polynomial (`nguyen1`), and a transcendental-plus-polynomial expression (`trigonometric`). Input draws and fitting noise are deterministic per seed. Separate IID test and OOD test sets are generated without exposing them to `fit`. OOD ranges are intentionally disjoint from the training range.
@@ -32,4 +38,8 @@ These commands are a development-scale run. Ablation flags retain the same maxim
 6. Report task-level and seed-level distributions: recovery rates with binomial intervals, paired NRMSE differences, complexity and runtime. State paired units, dependence, multiple-comparison handling and failure denominators. Avoid treating different seeds from one task as independent tasks.
 7. Inspect recovered equations, domains and dimensional validity. Compare algebraic equivalence with explicit assumptions; use out-of-domain numerical checks only as supporting evidence.
 
-Upstream baselines have not been run by the development test suite. Do not relabel the internal `no_rnn` or `no_units` variants as PhySO or DSO. Their architectures and search schedules differ.
+The original development test suite did not run upstream baselines. The separate
+acceptance pilot runs unchanged PhySO source with documented budget adaptations;
+DSO remains unrun in the current environment. Do not relabel the internal
+`no_rnn` or `no_units` variants as PhySO or DSO. Their architectures and search
+schedules differ.

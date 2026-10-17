@@ -2,7 +2,7 @@
 
 **Dimension-constrained Neural-guided Symbolic Regression** — a research implementation combining a unit-aware GRU expression generator, genetic programming, and NSGA-II model selection.
 
-[中文使用说明](docs/README.zh-CN.md) · [Algorithm](docs/ALGORITHM.md) · [Source mapping](docs/SOURCES.md) · [Experiment protocol](docs/EXPERIMENTS.md)
+[中文使用说明](docs/README.zh-CN.md) · [Algorithm](docs/ALGORITHM.md) · [Source mapping](docs/SOURCES.md) · [Experiment protocol](docs/EXPERIMENTS.md) · [Acceptance results](docs/ACCEPTANCE_RESULTS.zh-CN.md)
 
 DimenSR discovers analytic relationships from numeric data and supplied physical units. It implements the proposed RNN–GP workflow in a small, independent PyTorch package, drawing on PhySO and DSO and the accompanying literature. It is an experimental algorithm, not an official release of either upstream project. Comparative superiority and research novelty have not been established.
 
@@ -91,6 +91,15 @@ python -m build
 Benchmarks save per-run configurations, raw model trees, errors, evaluation counts, constant-fit work and wall time. IID, extrapolation and exact-zero/boundary probe sets are not used during search. Numerical recovery checks all three and is not a proof of symbolic equivalence. These small cases exercise functionality; larger, matched-budget comparisons against upstream methods are still needed.
 
 See [validation results](docs/VALIDATION.md) for checks actually run for this release. Training progress and benchmark checkpoints are written alongside CLI outputs. An interrupted benchmark checkpoint is inspectable; automatic training resume is not implemented.
+
+The separate [acceptance pilot](docs/ACCEPTANCE_RESULTS.zh-CN.md) compares frozen
+DimenSR 0.2.0 with an unmodified, pinned PhySO revision on eight equations, three
+seeds and two noise levels, plus five internal ablations (126 runs). Its
+[source-backed protocol](docs/ACCEPTANCE_PROTOCOL.zh-CN.md) distinguishes final
+selection from candidate discovery, numerical recovery from symbolic equivalence,
+and unit validity from domain validity. This is a small adapted-budget comparison;
+compute and free-constant semantics differ, and legacy DSO has not been run.
+Artifacts and rerun instructions are in [results/acceptance_v1](results/acceptance_v1).
 
 ### Real experimental data
 

@@ -1,6 +1,19 @@
 # Validation record
 
-Validation date: **2026-10-17**. These are actual runs, not expected scores. No upstream comparative benchmark is claimed. The initial release passed all four [GitHub CI jobs](https://github.com/Ashore521/dimensr/actions/runs/39024193283); later checks are available on the repository Actions page.
+Historical development validation date: **2026-10-17**. These are actual runs,
+not expected scores. A subsequent **2026-10-18** [acceptance report](ACCEPTANCE_RESULTS.zh-CN.md)
+adds a limited, adapted-budget comparison with pinned upstream PhySO; DSO and
+publication-scale comparative validation remain incomplete. The initial release
+passed all four [GitHub CI jobs](https://github.com/Ashore521/dimensr/actions/runs/39024193283);
+later checks are available on the repository Actions page.
+
+The acceptance tooling suite passed **67 tests in 10.54 seconds** on 2026-10-18
+(48 existing tests plus 19 data-isolation, raw-domain, scoring and verifier checks).
+All 126 planned fits completed. One preselected independent repeat reproduced all
+non-timing model/run state and predictions exactly. See the machine-readable
+`results/acceptance_v1/software_checks.json` and `reproducibility.json` for scope
+and hashes. These engineering checks do not imply that the algorithm passed every
+scientific acceptance threshold; those decisions are in the separate report.
 
 ## Environment and commands
 

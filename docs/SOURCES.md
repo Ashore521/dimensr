@@ -11,6 +11,12 @@ Inspection date: 2026-10-17. The source set was supplied by the project owner. L
 
 DSO's inspected installation specifies `tensorflow==1.14`, `numpy<=1.19`, and `numba==0.53.1`. DimenSR therefore implements the referenced concepts independently using current PyTorch instead of combining incompatible dependency stacks. No claim is made that its behavior or benchmark scores reproduce the upstream implementations exactly. The inspected raw files were retrieved from default-branch URLs; the revision endpoints were checked during the same inspection session.
 
+For the subsequent acceptance pilot, full archives at these exact commits were
+retrieved and relevant source/config/data files verified byte-for-byte against
+the archives. Archive hashes, package versions and the DSO compatibility probe
+are recorded in `results/acceptance_v1/provenance.json`; benchmark definitions and
+paper-to-protocol differences are documented in [the acceptance protocol](ACCEPTANCE_PROTOCOL.zh-CN.md).
+
 ## Literature and proposal
 
 | Evidence | Adopted idea | Implementation and differences |

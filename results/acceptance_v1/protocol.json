@@ -1,0 +1,1678 @@
+{
+  "version": 1,
+  "frozen_utc": "2026-10-17T15:37:17Z",
+  "scope": "small adapted-budget pilot, not a paper reproduction or equal-compute ranking",
+  "source_commit": "a555f11b0e635c251d8eac2a0001e3c6452df9b1",
+  "source_hashes": {
+    "src/dimensr/benchmarks.py": "4ab488b8beea08966a70013a1d3ecbd6393de34b6031db4c9c85edf1a6d55978",
+    "src/dimensr/cli.py": "cbbf88eb9052738f47750fed86f1fefa5cb570edbf28cd9d061e2f3a3d371822",
+    "src/dimensr/complexity.py": "6261086ebda0b8df2de1cfd5d9d04327e416d9cb881cd133833a400a5d21fe5b",
+    "src/dimensr/config.py": "502bee36b5be1895cb97a60ad205db59b092863a7749c44a9ae1a9371b596675",
+    "src/dimensr/evaluation.py": "98d1e9069dc10262bb40e74cbc4e2c1bb4b1c5a4e100d8fd42b137159ec79e43",
+    "src/dimensr/expression.py": "2bbbff3ba616e002267d9fcbc521c5171e23cdb9704821af21ab1cc6271f276e",
+    "src/dimensr/fitting.py": "faab19e6735effee7a5a76de9c82a4d79d9bd0979406849eb4df1147188e0040",
+    "src/dimensr/genetics.py": "cd1088866844ad565078bd99c287587c014d7c7390242d281feefef5e3a999f3",
+    "src/dimensr/grammar.py": "1a14031fd3fb86aa7ef8734fbe31ad05f2b981597e7efc75aeb834df8b7438d9",
+    "src/dimensr/pareto.py": "b01cf8f1798dd2697cf052998ead210964a77cc1fda3a454535a6673bc79a1e9",
+    "src/dimensr/policy.py": "b23af3d05dbd93535b6868e93868286cc73c302a3da5d5297a71d1714ee301e7",
+    "src/dimensr/real_data.py": "0617fe2159b9e39aeaf3b2f8b523c399688cf8b0b4102889a96901ab1b4b9bf7",
+    "src/dimensr/regressor.py": "8332f9b6525257bf6360f7b0cd17b0557f995b5c0b1250fbffadd340f5771c60",
+    "src/dimensr/seeding.py": "391f1ac9734baa2e5486398884f1d3150b4143da838e752e5516dc78924aafe5",
+    "src/dimensr/units.py": "33fb584c2e1a25b87bb60381ff5f19f95407b3f112f05e7fd94be25d4c736cde",
+    "src/dimensr/__init__.py": "8200c6611083d5e78792c7eb471db3f24c94fb8e3b34017f3e8bc0c78e1ce81b",
+    "src/dimensr/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "examples/acceptance_benchmark.py": "ac1745301e0d1e69d6c0fbc7703b918cbc3d5fd7bd78638bf9e81a181747e5ae",
+    "examples/acceptance_cases.json": "290ae96427097c354c485ef28d831d2dbd1f978d66fb7da1a71d161e045aade9"
+  },
+  "dataset_hashes": {
+    "data/Nguyen-1_s11_n0_fit.npz": "18834d350b5fc6bdaf7b3e11800175d5777c948b196bd85f5a021d1925d6e71f",
+    "data/Nguyen-1_s11_n0_holdout.npz": "6d6f03e0318e4134a1c0c2018d1133056f9af362743310457e96399cf9cb9a88",
+    "data/Nguyen-1_s11_n0.01_fit.npz": "c283588e181fdd91695f4d7d7f0cb8ca915f93a60bcf85203b6075fec433953f",
+    "data/Nguyen-1_s11_n0.01_holdout.npz": "6d6f03e0318e4134a1c0c2018d1133056f9af362743310457e96399cf9cb9a88",
+    "data/Nguyen-1_s22_n0_fit.npz": "ccd2be305b9ec18cc1763aa90317fcf2f9b335022d1816a3e42502575fbe8832",
+    "data/Nguyen-1_s22_n0_holdout.npz": "d4071b50db7a6fde5e8142412921bf949f265f63dc8fad9d6defcbedee32a569",
+    "data/Nguyen-1_s22_n0.01_fit.npz": "446bb8b797b538253edd667892d17708a766549f29b10856de9926ecd354c5ef",
+    "data/Nguyen-1_s22_n0.01_holdout.npz": "d4071b50db7a6fde5e8142412921bf949f265f63dc8fad9d6defcbedee32a569",
+    "data/Nguyen-1_s33_n0_fit.npz": "6039d765c0e39c770ce3bfd75c0c65a51a9d322b26b20e34e8b201b2f2705083",
+    "data/Nguyen-1_s33_n0_holdout.npz": "d52339f922f6ae6bd04182ceef5a5a239f579ad50c0d8b9023a6c12cf8cce5dd",
+    "data/Nguyen-1_s33_n0.01_fit.npz": "8c4652a00f4f10b5a08d79d57406df6858c791c6058fbe6fd5048cbf5db1a020",
+    "data/Nguyen-1_s33_n0.01_holdout.npz": "d52339f922f6ae6bd04182ceef5a5a239f579ad50c0d8b9023a6c12cf8cce5dd",
+    "data/Nguyen-5_s11_n0_fit.npz": "6095b96c0e2dbde2b5cb286b5a75206077eb43de39bec606980d85b0f2dcf029",
+    "data/Nguyen-5_s11_n0_holdout.npz": "7ae340aa6ae52530c21805f8755fd61b29611b051cee32bab89590052296b4da",
+    "data/Nguyen-5_s11_n0.01_fit.npz": "c1322e7137d289981e6e510d6d4f35ba8cbbc68ee61da949a6839f6e1a989a58",
+    "data/Nguyen-5_s11_n0.01_holdout.npz": "7ae340aa6ae52530c21805f8755fd61b29611b051cee32bab89590052296b4da",
+    "data/Nguyen-5_s22_n0_fit.npz": "aa0ddcc66059344d544ed62629a920ebed53feecce9bc802b608b209d6091c57",
+    "data/Nguyen-5_s22_n0_holdout.npz": "31b3c20cb1ec629e9ec3102cf85ad3ac999b5fac89c3c8de31bdffb84d033393",
+    "data/Nguyen-5_s22_n0.01_fit.npz": "9f317cc87cb3f7a5a7da801f675508f241f1c3bd44f6b9ec7c937ca4ebbb433d",
+    "data/Nguyen-5_s22_n0.01_holdout.npz": "31b3c20cb1ec629e9ec3102cf85ad3ac999b5fac89c3c8de31bdffb84d033393",
+    "data/Nguyen-5_s33_n0_fit.npz": "cd451f9b6c66a56f4c9481401e668f3c3724f421c76552eb6b6fb5f940dcf88f",
+    "data/Nguyen-5_s33_n0_holdout.npz": "156122c0412a5d7bd3ff2bd648fa9e4a3f12dfc6e989d4009f2eeddcdb2669e2",
+    "data/Nguyen-5_s33_n0.01_fit.npz": "2bd7625841740e9a99bfc173eb230b473e31305d583d79586d1da92921887b73",
+    "data/Nguyen-5_s33_n0.01_holdout.npz": "156122c0412a5d7bd3ff2bd648fa9e4a3f12dfc6e989d4009f2eeddcdb2669e2",
+    "data/Nguyen-7_s11_n0_fit.npz": "4da86a42f94f7ba49777707653d12569d75e542e605e7f3f2e1acdfa2f27ec01",
+    "data/Nguyen-7_s11_n0_holdout.npz": "1268a2475b1c07febfd52f21960136db3a498f07ee47fb2d84c3925f670247bc",
+    "data/Nguyen-7_s11_n0.01_fit.npz": "b4d61dda694427e5ce2e35f5d1b30fbd9d3c220c024d611d0bc852e882733683",
+    "data/Nguyen-7_s11_n0.01_holdout.npz": "1268a2475b1c07febfd52f21960136db3a498f07ee47fb2d84c3925f670247bc",
+    "data/Nguyen-7_s22_n0_fit.npz": "4d5da0180262acbee77ea13ec185a47a84c3879fe55789f7f89f46cd2cc22297",
+    "data/Nguyen-7_s22_n0_holdout.npz": "5d752fb8a2c3c12e10c04d4d280cece91dd975fdc02f92110c634db45e6d14b0",
+    "data/Nguyen-7_s22_n0.01_fit.npz": "0523ec146c5495642fb9e1cae0ceaba3c4fdbf370fc1ad9dcbcc108c5bfc230e",
+    "data/Nguyen-7_s22_n0.01_holdout.npz": "5d752fb8a2c3c12e10c04d4d280cece91dd975fdc02f92110c634db45e6d14b0",
+    "data/Nguyen-7_s33_n0_fit.npz": "96b16ef0df46f60c39d37dfca40e1ca9e4f9c0dc2a0a31b06136f60f323b38c0",
+    "data/Nguyen-7_s33_n0_holdout.npz": "50841642d361bc2493168d298c0dffb4bc4c11e44498b25bb71b839a2171ba8f",
+    "data/Nguyen-7_s33_n0.01_fit.npz": "2368034fc995240f94d9984d17b9ea8ea3bd702dab15c3a85e8050188fd7cbc4",
+    "data/Nguyen-7_s33_n0.01_holdout.npz": "50841642d361bc2493168d298c0dffb4bc4c11e44498b25bb71b839a2171ba8f",
+    "data/Nguyen-9_s11_n0_fit.npz": "6153c7e97d2059dff920d482dae8b3dfc5cbde490503c02b1411d0f92a4ff570",
+    "data/Nguyen-9_s11_n0_holdout.npz": "8d059f32e452e991041e96a1358b51c71c356d88af99a528f0415b61bac2a352",
+    "data/Nguyen-9_s11_n0.01_fit.npz": "31b7243ee7597153c3a3b08c0448bc18771bca0464a69ae3d5ba593d091eeef7",
+    "data/Nguyen-9_s11_n0.01_holdout.npz": "8d059f32e452e991041e96a1358b51c71c356d88af99a528f0415b61bac2a352",
+    "data/Nguyen-9_s22_n0_fit.npz": "8a2dafbf3ac2c504bc1dec1e8ca99930d4efb21349d32fdc6c621f775c61c6c6",
+    "data/Nguyen-9_s22_n0_holdout.npz": "d56108308b2d073f28cd9e6c546bf0a720627d9d50f6fee0c857b48ed24f7e69",
+    "data/Nguyen-9_s22_n0.01_fit.npz": "082ec79dc7f2527aac95559f5374bfd6ca6da9f8ee7f761a7ed40b02f1d450c1",
+    "data/Nguyen-9_s22_n0.01_holdout.npz": "d56108308b2d073f28cd9e6c546bf0a720627d9d50f6fee0c857b48ed24f7e69",
+    "data/Nguyen-9_s33_n0_fit.npz": "b5760d783907745bf5c9cc4ed8cca10347e8d1544c0b9d0b148e2e0296a09daa",
+    "data/Nguyen-9_s33_n0_holdout.npz": "6ad40079d9aed17cf86c084d36c6b558d9128726ec52630a150b5cc6a2668851",
+    "data/Nguyen-9_s33_n0.01_fit.npz": "39df5ee4dc7520b4f528b0fca485948fd569e994ec7936618fd5949cb9525bdf",
+    "data/Nguyen-9_s33_n0.01_holdout.npz": "6ad40079d9aed17cf86c084d36c6b558d9128726ec52630a150b5cc6a2668851",
+    "data/Feynman-I.12.1_s11_n0_fit.npz": "ee5ba96820553e4034a7692da4e8985eabe5bf4186908cd7ceefbce8e43b06fa",
+    "data/Feynman-I.12.1_s11_n0_holdout.npz": "cf1676e06a3243befaaba110ecd4390aed634a2b91128eea63fb21af5d509a39",
+    "data/Feynman-I.12.1_s11_n0.01_fit.npz": "720c3ffc710e94c1e640eb7048a8fc829ece76b8bba1a2c5229d5c17b24ad767",
+    "data/Feynman-I.12.1_s11_n0.01_holdout.npz": "cf1676e06a3243befaaba110ecd4390aed634a2b91128eea63fb21af5d509a39",
+    "data/Feynman-I.12.1_s22_n0_fit.npz": "bba261217426585686fc065b79df2f308ac1f1e4bbe51e1c40e2563138f95371",
+    "data/Feynman-I.12.1_s22_n0_holdout.npz": "2d1486891e997fa3dcd95700727bb459e049ecfe21c54954178ed4751677fc5c",
+    "data/Feynman-I.12.1_s22_n0.01_fit.npz": "e8c9f54787eeee9b2dd4fab6421dc8a56c035d6aa61e578227f20e45aac28498",
+    "data/Feynman-I.12.1_s22_n0.01_holdout.npz": "2d1486891e997fa3dcd95700727bb459e049ecfe21c54954178ed4751677fc5c",
+    "data/Feynman-I.12.1_s33_n0_fit.npz": "0de1ee974a2e05dcf096860dbe6e264deb5fc659b2c6e7462c5c45952c2821ca",
+    "data/Feynman-I.12.1_s33_n0_holdout.npz": "7663f46d387656bab77e5b74bb0df2dfd49aea99310ac014ba56ac6155d47b8b",
+    "data/Feynman-I.12.1_s33_n0.01_fit.npz": "32af78a8b6c837b39e8961618566d7e4b80fd9a15857f042a312ffd1e1e35a04",
+    "data/Feynman-I.12.1_s33_n0.01_holdout.npz": "7663f46d387656bab77e5b74bb0df2dfd49aea99310ac014ba56ac6155d47b8b",
+    "data/Feynman-I.14.4_s11_n0_fit.npz": "06ea4514af890bc8877ebc312f2ebdd4680b527b3fa872f504149c0edbcaf08e",
+    "data/Feynman-I.14.4_s11_n0_holdout.npz": "de434d8d7a7a53788f0adedfbb64682ae84226ba4244135c6b6d380b830ac689",
+    "data/Feynman-I.14.4_s11_n0.01_fit.npz": "b38865ffec2d1219c336d070b3903b9dfee22df270e0c130349696bb7123bf4f",
+    "data/Feynman-I.14.4_s11_n0.01_holdout.npz": "de434d8d7a7a53788f0adedfbb64682ae84226ba4244135c6b6d380b830ac689",
+    "data/Feynman-I.14.4_s22_n0_fit.npz": "2d87eb5532798f5f4760a932075d3e50c879dff199f940597dff3a4877f8d2b8",
+    "data/Feynman-I.14.4_s22_n0_holdout.npz": "d2e98d3510df006ab3bf56dac79850483a29cced667ee9db702031773c704ee6",
+    "data/Feynman-I.14.4_s22_n0.01_fit.npz": "939cd8d6feb85f06ae2fc48e0c955e19327f50d4c5baece7ce92ddf3353908db",
+    "data/Feynman-I.14.4_s22_n0.01_holdout.npz": "d2e98d3510df006ab3bf56dac79850483a29cced667ee9db702031773c704ee6",
+    "data/Feynman-I.14.4_s33_n0_fit.npz": "4eedd09ae5a11f557e77c5433a4a161f96244d0ebd896091deb9ed0a2bf2ad85",
+    "data/Feynman-I.14.4_s33_n0_holdout.npz": "328393674445c0199524542d7fc7a4babd1381be38f6c5bfcb430f61c05b58c8",
+    "data/Feynman-I.14.4_s33_n0.01_fit.npz": "d35098eb24417223f091d98c3c89b0c2866e8af1ee92307397c18a9d19ed3ded",
+    "data/Feynman-I.14.4_s33_n0.01_holdout.npz": "328393674445c0199524542d7fc7a4babd1381be38f6c5bfcb430f61c05b58c8",
+    "data/Feynman-I.18.4_s11_n0_fit.npz": "05a345659d23e2d4d7aa7a265ce96e4a33740261994b3fb3ea33115943e36602",
+    "data/Feynman-I.18.4_s11_n0_holdout.npz": "6285a8a96387dae7c9f0e2aacf9a77cff5301e7cdab40bd0b29bbd656cef4765",
+    "data/Feynman-I.18.4_s11_n0.01_fit.npz": "faf2c8e8f7ade3cc3706b109836b3742ce25fca4f074c5f81cd8fab0ff6e1892",
+    "data/Feynman-I.18.4_s11_n0.01_holdout.npz": "6285a8a96387dae7c9f0e2aacf9a77cff5301e7cdab40bd0b29bbd656cef4765",
+    "data/Feynman-I.18.4_s22_n0_fit.npz": "b36ef22735b6c445e6fc3772e5c15d99aaa612a0a84e82dd0f3dbf64d01e6fb9",
+    "data/Feynman-I.18.4_s22_n0_holdout.npz": "6fd6d60acd67617541d9ac385d7ee8c0184a1a7169a2a5a229b7ef81673a2100",
+    "data/Feynman-I.18.4_s22_n0.01_fit.npz": "650baaa40e8782c945078f8a663364def6b2a8276feb76ce33b83f574f0284f1",
+    "data/Feynman-I.18.4_s22_n0.01_holdout.npz": "6fd6d60acd67617541d9ac385d7ee8c0184a1a7169a2a5a229b7ef81673a2100",
+    "data/Feynman-I.18.4_s33_n0_fit.npz": "3b0eca410b5dd98bbdcad16d650ad80993ad91f5f55f409747a03f093c6a3264",
+    "data/Feynman-I.18.4_s33_n0_holdout.npz": "295ae4ce4e65f10b6b2ca31cd89774553b27586c8cf5469dd620a5ddcc0b741c",
+    "data/Feynman-I.18.4_s33_n0.01_fit.npz": "fd12af15b7062ad1481b75d3b7f19d5d6f8784433010a14707e4cab0692948e8",
+    "data/Feynman-I.18.4_s33_n0.01_holdout.npz": "295ae4ce4e65f10b6b2ca31cd89774553b27586c8cf5469dd620a5ddcc0b741c",
+    "data/Feynman-I.10.7_s11_n0_fit.npz": "4eb43072e9aa34ad25740744e5b4b73633fefb1c112018772e4e314dcc12d79b",
+    "data/Feynman-I.10.7_s11_n0_holdout.npz": "7a84a243c2e0b1d34bdafca720ea0d158bd4eb10daa57fb1d1660623577e1f17",
+    "data/Feynman-I.10.7_s11_n0.01_fit.npz": "69de188f54f8c5d64687461e8c90878930b158d2c9466bdc22b5292288637d7b",
+    "data/Feynman-I.10.7_s11_n0.01_holdout.npz": "7a84a243c2e0b1d34bdafca720ea0d158bd4eb10daa57fb1d1660623577e1f17",
+    "data/Feynman-I.10.7_s22_n0_fit.npz": "02e8022dcf8b0e8c4cf1e254ec7f057f3d4840a814c3c9834aea6dc232de6586",
+    "data/Feynman-I.10.7_s22_n0_holdout.npz": "fbe656517aca43fd286ae6bba277cd1f219edae3f4a7b6f570ccb12855a4a62c",
+    "data/Feynman-I.10.7_s22_n0.01_fit.npz": "8bb82ac2a53691d1ed21d05289faaba4679006330c0e9741790501bce5a6658c",
+    "data/Feynman-I.10.7_s22_n0.01_holdout.npz": "fbe656517aca43fd286ae6bba277cd1f219edae3f4a7b6f570ccb12855a4a62c",
+    "data/Feynman-I.10.7_s33_n0_fit.npz": "7c52492156592b4fe675c0cf4cf69a389d5563489664f22100ad86b3a11a6ca8",
+    "data/Feynman-I.10.7_s33_n0_holdout.npz": "7f230a592793e21e54a34e02b5089ffe3971e45ada26e642a35278c798de1b45",
+    "data/Feynman-I.10.7_s33_n0.01_fit.npz": "33f57d53b5eddb7068e895b073bcb393111d46f6901647e7097c9fc2cafd7a30",
+    "data/Feynman-I.10.7_s33_n0.01_holdout.npz": "7f230a592793e21e54a34e02b5089ffe3971e45ada26e642a35278c798de1b45"
+  },
+  "cases": {
+    "Nguyen-1": {
+      "source": "DSO benchmarks.csv: Nguyen-1",
+      "names": [
+        "x"
+      ],
+      "truth": "x**3+x**2+x",
+      "bounds": [
+        [
+          -1,
+          1
+        ]
+      ],
+      "ood": [
+        [
+          1,
+          2
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Nguyen-5": {
+      "source": "DSO benchmarks.csv: Nguyen-5",
+      "names": [
+        "x"
+      ],
+      "truth": "sin(x**2)*cos(x)-1",
+      "bounds": [
+        [
+          -1,
+          1
+        ]
+      ],
+      "ood": [
+        [
+          1,
+          2
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Nguyen-7": {
+      "source": "DSO benchmarks.csv: Nguyen-7",
+      "names": [
+        "x"
+      ],
+      "truth": "log(x+1)+log(x**2+1)",
+      "bounds": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ood": [
+        [
+          2,
+          3
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Nguyen-9": {
+      "source": "DSO benchmarks.csv: Nguyen-9",
+      "names": [
+        "x",
+        "y"
+      ],
+      "truth": "sin(x)+sin(y**2)",
+      "bounds": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "ood": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Feynman-I.12.1": {
+      "source": "PhySO FeynmanEquations.csv: I.12.1; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "mu",
+        "Nn"
+      ],
+      "truth": "mu*Nn",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        1,
+        1,
+        -2,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Feynman-I.14.4": {
+      "source": "PhySO FeynmanEquations.csv: I.14.4; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "k",
+        "x"
+      ],
+      "truth": "k*x**2/2",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "units": [
+        [
+          0,
+          1,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        2,
+        1,
+        -2,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Feynman-I.18.4": {
+      "source": "PhySO FeynmanEquations.csv: I.18.4; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "m1",
+        "m2",
+        "r1",
+        "r2"
+      ],
+      "truth": "(m1*r1+m2*r2)/(m1+m2)",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "units": [
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "Feynman-I.10.7": {
+      "source": "PhySO FeynmanEquations.csv: I.10.7; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "m",
+        "v",
+        "c"
+      ],
+      "truth": "m/sqrt(1-v**2/c**2)",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          10
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          2,
+          2.8
+        ],
+        [
+          10,
+          14
+        ]
+      ],
+      "units": [
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "jobs": [
+    {
+      "id": "Nguyen-1_s11_n0_full",
+      "data_key": "Nguyen-1_s11_n0",
+      "case": "Nguyen-1",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s11_n0_physo",
+      "data_key": "Nguyen-1_s11_n0",
+      "case": "Nguyen-1",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-1_s11_n0.01_full",
+      "data_key": "Nguyen-1_s11_n0.01",
+      "case": "Nguyen-1",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s11_n0.01_physo",
+      "data_key": "Nguyen-1_s11_n0.01",
+      "case": "Nguyen-1",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-1_s22_n0_full",
+      "data_key": "Nguyen-1_s22_n0",
+      "case": "Nguyen-1",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s22_n0_physo",
+      "data_key": "Nguyen-1_s22_n0",
+      "case": "Nguyen-1",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-1_s22_n0.01_full",
+      "data_key": "Nguyen-1_s22_n0.01",
+      "case": "Nguyen-1",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s22_n0.01_physo",
+      "data_key": "Nguyen-1_s22_n0.01",
+      "case": "Nguyen-1",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-1_s33_n0_full",
+      "data_key": "Nguyen-1_s33_n0",
+      "case": "Nguyen-1",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s33_n0_physo",
+      "data_key": "Nguyen-1_s33_n0",
+      "case": "Nguyen-1",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-1_s33_n0.01_full",
+      "data_key": "Nguyen-1_s33_n0.01",
+      "case": "Nguyen-1",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-1_s33_n0.01_physo",
+      "data_key": "Nguyen-1_s33_n0.01",
+      "case": "Nguyen-1",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s11_n0_full",
+      "data_key": "Nguyen-5_s11_n0",
+      "case": "Nguyen-5",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s11_n0_physo",
+      "data_key": "Nguyen-5_s11_n0",
+      "case": "Nguyen-5",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s11_n0.01_full",
+      "data_key": "Nguyen-5_s11_n0.01",
+      "case": "Nguyen-5",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s11_n0.01_physo",
+      "data_key": "Nguyen-5_s11_n0.01",
+      "case": "Nguyen-5",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s22_n0_full",
+      "data_key": "Nguyen-5_s22_n0",
+      "case": "Nguyen-5",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s22_n0_physo",
+      "data_key": "Nguyen-5_s22_n0",
+      "case": "Nguyen-5",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s22_n0.01_full",
+      "data_key": "Nguyen-5_s22_n0.01",
+      "case": "Nguyen-5",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s22_n0.01_physo",
+      "data_key": "Nguyen-5_s22_n0.01",
+      "case": "Nguyen-5",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s33_n0_full",
+      "data_key": "Nguyen-5_s33_n0",
+      "case": "Nguyen-5",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s33_n0_physo",
+      "data_key": "Nguyen-5_s33_n0",
+      "case": "Nguyen-5",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-5_s33_n0.01_full",
+      "data_key": "Nguyen-5_s33_n0.01",
+      "case": "Nguyen-5",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-5_s33_n0.01_physo",
+      "data_key": "Nguyen-5_s33_n0.01",
+      "case": "Nguyen-5",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s11_n0_full",
+      "data_key": "Nguyen-7_s11_n0",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s11_n0_physo",
+      "data_key": "Nguyen-7_s11_n0",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_full",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_physo",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_no_rnn",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_no_gp",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_no_units",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_no_sd",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Nguyen-7_s11_n0.01_no_rad",
+      "data_key": "Nguyen-7_s11_n0.01",
+      "case": "Nguyen-7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Nguyen-7_s22_n0_full",
+      "data_key": "Nguyen-7_s22_n0",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s22_n0_physo",
+      "data_key": "Nguyen-7_s22_n0",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_full",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_physo",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_no_rnn",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_no_gp",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_no_units",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_no_sd",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Nguyen-7_s22_n0.01_no_rad",
+      "data_key": "Nguyen-7_s22_n0.01",
+      "case": "Nguyen-7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Nguyen-7_s33_n0_full",
+      "data_key": "Nguyen-7_s33_n0",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s33_n0_physo",
+      "data_key": "Nguyen-7_s33_n0",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_full",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_physo",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_no_rnn",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_no_gp",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_no_units",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_no_sd",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Nguyen-7_s33_n0.01_no_rad",
+      "data_key": "Nguyen-7_s33_n0.01",
+      "case": "Nguyen-7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Nguyen-9_s11_n0_full",
+      "data_key": "Nguyen-9_s11_n0",
+      "case": "Nguyen-9",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s11_n0_physo",
+      "data_key": "Nguyen-9_s11_n0",
+      "case": "Nguyen-9",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-9_s11_n0.01_full",
+      "data_key": "Nguyen-9_s11_n0.01",
+      "case": "Nguyen-9",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s11_n0.01_physo",
+      "data_key": "Nguyen-9_s11_n0.01",
+      "case": "Nguyen-9",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-9_s22_n0_full",
+      "data_key": "Nguyen-9_s22_n0",
+      "case": "Nguyen-9",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s22_n0_physo",
+      "data_key": "Nguyen-9_s22_n0",
+      "case": "Nguyen-9",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-9_s22_n0.01_full",
+      "data_key": "Nguyen-9_s22_n0.01",
+      "case": "Nguyen-9",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s22_n0.01_physo",
+      "data_key": "Nguyen-9_s22_n0.01",
+      "case": "Nguyen-9",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-9_s33_n0_full",
+      "data_key": "Nguyen-9_s33_n0",
+      "case": "Nguyen-9",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s33_n0_physo",
+      "data_key": "Nguyen-9_s33_n0",
+      "case": "Nguyen-9",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Nguyen-9_s33_n0.01_full",
+      "data_key": "Nguyen-9_s33_n0.01",
+      "case": "Nguyen-9",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Nguyen-9_s33_n0.01_physo",
+      "data_key": "Nguyen-9_s33_n0.01",
+      "case": "Nguyen-9",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s11_n0_full",
+      "data_key": "Feynman-I.12.1_s11_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s11_n0_physo",
+      "data_key": "Feynman-I.12.1_s11_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s11_n0.01_full",
+      "data_key": "Feynman-I.12.1_s11_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s11_n0.01_physo",
+      "data_key": "Feynman-I.12.1_s11_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s22_n0_full",
+      "data_key": "Feynman-I.12.1_s22_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s22_n0_physo",
+      "data_key": "Feynman-I.12.1_s22_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s22_n0.01_full",
+      "data_key": "Feynman-I.12.1_s22_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s22_n0.01_physo",
+      "data_key": "Feynman-I.12.1_s22_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s33_n0_full",
+      "data_key": "Feynman-I.12.1_s33_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s33_n0_physo",
+      "data_key": "Feynman-I.12.1_s33_n0",
+      "case": "Feynman-I.12.1",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.12.1_s33_n0.01_full",
+      "data_key": "Feynman-I.12.1_s33_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.12.1_s33_n0.01_physo",
+      "data_key": "Feynman-I.12.1_s33_n0.01",
+      "case": "Feynman-I.12.1",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s11_n0_full",
+      "data_key": "Feynman-I.14.4_s11_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s11_n0_physo",
+      "data_key": "Feynman-I.14.4_s11_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s11_n0.01_full",
+      "data_key": "Feynman-I.14.4_s11_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s11_n0.01_physo",
+      "data_key": "Feynman-I.14.4_s11_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s22_n0_full",
+      "data_key": "Feynman-I.14.4_s22_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s22_n0_physo",
+      "data_key": "Feynman-I.14.4_s22_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s22_n0.01_full",
+      "data_key": "Feynman-I.14.4_s22_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s22_n0.01_physo",
+      "data_key": "Feynman-I.14.4_s22_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s33_n0_full",
+      "data_key": "Feynman-I.14.4_s33_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s33_n0_physo",
+      "data_key": "Feynman-I.14.4_s33_n0",
+      "case": "Feynman-I.14.4",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.14.4_s33_n0.01_full",
+      "data_key": "Feynman-I.14.4_s33_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.14.4_s33_n0.01_physo",
+      "data_key": "Feynman-I.14.4_s33_n0.01",
+      "case": "Feynman-I.14.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0_full",
+      "data_key": "Feynman-I.18.4_s11_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0_physo",
+      "data_key": "Feynman-I.18.4_s11_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_full",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_physo",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_no_rnn",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_no_gp",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_no_units",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_no_sd",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Feynman-I.18.4_s11_n0.01_no_rad",
+      "data_key": "Feynman-I.18.4_s11_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0_full",
+      "data_key": "Feynman-I.18.4_s22_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0_physo",
+      "data_key": "Feynman-I.18.4_s22_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_full",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_physo",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_no_rnn",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_no_gp",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_no_units",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_no_sd",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Feynman-I.18.4_s22_n0.01_no_rad",
+      "data_key": "Feynman-I.18.4_s22_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0_full",
+      "data_key": "Feynman-I.18.4_s33_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0_physo",
+      "data_key": "Feynman-I.18.4_s33_n0",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_full",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_physo",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_no_rnn",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_rnn"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_no_gp",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_gp"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_no_units",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_units"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_no_sd",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_sd"
+    },
+    {
+      "id": "Feynman-I.18.4_s33_n0.01_no_rad",
+      "data_key": "Feynman-I.18.4_s33_n0.01",
+      "case": "Feynman-I.18.4",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "no_rad"
+    },
+    {
+      "id": "Feynman-I.10.7_s11_n0_full",
+      "data_key": "Feynman-I.10.7_s11_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s11_n0_physo",
+      "data_key": "Feynman-I.10.7_s11_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 11,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.10.7_s11_n0.01_full",
+      "data_key": "Feynman-I.10.7_s11_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s11_n0.01_physo",
+      "data_key": "Feynman-I.10.7_s11_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 11,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.10.7_s22_n0_full",
+      "data_key": "Feynman-I.10.7_s22_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s22_n0_physo",
+      "data_key": "Feynman-I.10.7_s22_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 22,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.10.7_s22_n0.01_full",
+      "data_key": "Feynman-I.10.7_s22_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s22_n0.01_physo",
+      "data_key": "Feynman-I.10.7_s22_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 22,
+      "noise": 0.01,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.10.7_s33_n0_full",
+      "data_key": "Feynman-I.10.7_s33_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s33_n0_physo",
+      "data_key": "Feynman-I.10.7_s33_n0",
+      "case": "Feynman-I.10.7",
+      "seed": 33,
+      "noise": 0.0,
+      "variant": "physo"
+    },
+    {
+      "id": "Feynman-I.10.7_s33_n0.01_full",
+      "data_key": "Feynman-I.10.7_s33_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "full"
+    },
+    {
+      "id": "Feynman-I.10.7_s33_n0.01_physo",
+      "data_key": "Feynman-I.10.7_s33_n0.01",
+      "case": "Feynman-I.10.7",
+      "seed": 33,
+      "noise": 0.01,
+      "variant": "physo"
+    }
+  ],
+  "dimensr_config": {
+    "population_size": 64,
+    "epochs": 10,
+    "gp_generations": 3,
+    "selection_generations": 8,
+    "max_nodes": 21,
+    "max_depth": 7,
+    "operators": [
+      "add",
+      "sub",
+      "mul",
+      "div",
+      "square",
+      "sqrt",
+      "sin",
+      "cos",
+      "exp",
+      "log"
+    ],
+    "hidden_size": 32,
+    "learning_rate": 0.003,
+    "risk_fraction": 0.3,
+    "entropy_weight": 0.01,
+    "imitation_weight": 0.1,
+    "crossover_rate": 0.5,
+    "candidate_fraction": 0.3,
+    "min_candidates": 50,
+    "complexity_weights": [
+      1.0,
+      0.5,
+      2.0
+    ],
+    "selection_complexity_weight": 0.01,
+    "size_radius": 1,
+    "rademacher_draws": 32,
+    "perturbations": 8,
+    "perturbation_radius": 0.1,
+    "constant_bound": 1000000.0,
+    "constant_restarts": 2,
+    "constant_max_nfev": 40,
+    "domain_restarts": 4,
+    "polish_candidates": 8,
+    "polish_max_nfev": 160,
+    "selection_budget_fraction": 0.25,
+    "variation_attempts": 4,
+    "elite_fraction": 0.25,
+    "linear_seeds": true,
+    "output_bounds": null,
+    "domain_probe_count": 32,
+    "validation_fraction": 0.2,
+    "max_evaluations": 4096,
+    "random_state": 11,
+    "use_rnn": true,
+    "use_gp": true,
+    "use_units": true,
+    "use_size_diversity": true,
+    "use_rademacher": true
+  },
+  "physo_commit": "bfbfa88d5def09d3d0cd47f3e2252b5a25836721",
+  "physo_overrides": {
+    "base": "config1",
+    "batch_size": 256,
+    "epochs": 128,
+    "max_nodes": 21,
+    "min_nodes": 1,
+    "max_n_evaluations": 4096,
+    "stop_reward": 1.1,
+    "protected_ops": false,
+    "parallel_mode": false,
+    "cpu_threads": 1
+  },
+  "seed_rule": "same case/seed data across variants; independent case/seed/split RNG streams",
+  "primary": "final selection by validation NRMSE + 0.01*nodes/21 for both methods",
+  "secondary": "any stored Pareto candidate; truth is accessed only after all fits",
+  "gates": {
+    "numeric_recovery_nrmse": 1e-06,
+    "accurate_iid_r2": 0.999,
+    "minimum_noiseless_core_recovery": 1.0,
+    "noiseless_suite_recovery_target": 0.75,
+    "noisy_accurate_iid_target": 0.75,
+    "final_domain_failures_allowed": 0,
+    "dimensional_violations_allowed": 0
+  },
+  "workers": 4,
+  "timeout_seconds": 300
+}
