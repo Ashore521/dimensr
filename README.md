@@ -8,6 +8,13 @@
 fits; improved strict numerical recovery on the small study, with remaining
 composition-search failures and an explicit extrapolation-domain counterexample.
 
+Version 0.4 adds bounded interval-domain screening and complementary-feature
+search. Use `model.audit_domain(input_bounds=...)` to inspect the selected raw
+tree over an intended rectangular operating range; an unresolved result is
+reported explicitly. See the [study protocol](docs/INTERVAL_SEARCH_PROTOCOL.zh-CN.md)
+and [results](docs/INTERVAL_SEARCH_RESULTS.zh-CN.md): 18/18 strict numerical recoveries
+for 0.4 versus 12/18 for the contemporaneous 0.3 baseline on six reused noiseless tasks.
+
 DimenSR discovers analytic relationships from numeric data and supplied physical units. It implements the proposed RNN–GP workflow in a small, independent PyTorch package, drawing on PhySO and DSO and the accompanying literature. It is an experimental algorithm, not an official release of either upstream project. Comparative superiority and research novelty have not been established.
 
 ## Install
@@ -64,6 +71,13 @@ X_domain=...)` to declare additional valid input ranges or unlabelled points.
 For coupled/categorical domains, disable `boundary_probes` and set
 `domain_probe_count=0`, then provide permitted `X_domain` points only.
 Finite probes are **not a continuous-domain proof**. See the [domain API](docs/README.zh-CN.md#声明合法输入域).
+
+With `interval_checks=True` (0.4 default), candidate acceptance also requires
+interval screening to return `enclosed` on the declared box, or on the training
+box when automatic boundaries are enabled. `invalid` and `unresolved` are rejected.
+This numerical check may conservatively reject valid expressions and is not a
+formally verified mathematical certificate. `predict` still checks supplied rows;
+it does not automatically approve a new operating range.
 
 ## Fit your data
 

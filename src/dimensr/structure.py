@@ -19,8 +19,10 @@ def operator(token, *children):
 
 def structured_seeds(grammar, X, y, limit):
     constants = {u: Node(t, units=u) for t, u in grammar.terminals.items() if t.startswith("c")}
-    features, seen = [], set()
-    counts = dict(feature_evaluations=0, linear_subproblems=0, proposed_structures=0)
+    features, seen, numeric_seen = [], set(), set()
+    feature_limit = 384  # Reserve the remaining 128 slots for small products.
+    counts = dict(feature_evaluations=0, linear_subproblems=0, proposed_structures=0,
+                  numeric_duplicates=0, pair_screened=0, residual_projections=0)
     if limit <= 0:
         return [], counts
 
@@ -29,7 +31,7 @@ def structured_seeds(grammar, X, y, limit):
             return None
         tree, c = tree.canonical(values)
         key = tree, tuple(c)
-        if key in seen or len(features) >= 512:
+        if key in seen or len(features) >= feature_limit:
             return None
         seen.add(key)
         if tree.units not in grammar.units:
@@ -45,6 +47,13 @@ def structured_seeds(grammar, X, y, limit):
             norm = np.linalg.norm(v)
         if not np.isfinite(v).all() or not np.isfinite(norm) or norm < 1e-12:
             return None
+        # Initialization heuristic only: equal training vectors need not denote
+        # globally equivalent functions. Keep the first expression and its domain.
+        signature = tree.units, np.round(v / np.max(np.abs(v)), 12).tobytes()
+        if signature in numeric_seen:
+            counts["numeric_duplicates"] += 1
+            return None
+        numeric_seen.add(signature)
         feature = (tree, c, v)
         features.append(feature)
         return feature
@@ -98,7 +107,8 @@ def structured_seeds(grammar, X, y, limit):
                     if token in grammar.tokens:
                         for sign in (-1., 1.):
                             admit(operator(token, inner), np.r_[1., sign, c])
-    composable = [f for f in features if f[0].size <= 3]
+    feature_limit = 512
+    composable = sorted([f for f in features if f[0].size <= 3], key=lambda f: (f[0].size, repr(f[0])))
     for i, (a, ca, _) in enumerate(composable):
         for b, cb, _ in composable[i:]:
             if "mul" in grammar.tokens and a.size + b.size <= 6:
@@ -123,50 +133,80 @@ def structured_seeds(grammar, X, y, limit):
         intercept = constants.get(target_units) if "add" in grammar.tokens else None
         matrix = np.column_stack([f[2] for f in available])
         base = np.ones((len(y), 1)) if intercept is not None else np.empty((len(y), 0))
-        # Only the best 48 training correlations enter the sparse beam.
-        residual = target - target.mean() if intercept is not None else target
-        centered = matrix - matrix.mean(axis=0) if intercept is not None else matrix
-        correlation = np.abs(centered.T @ residual) / np.maximum(np.linalg.norm(centered, axis=0), 1e-12)
-        indices = np.argsort(-correlation, kind="stable")[:48]
+        pairs = []
+        if denominator is None and "add" in grammar.tokens:
+            # Bounded two-term lookahead prevents greedy single-term ranking
+            # from excluding both members of a complementary pair.
+            centered = matrix - matrix.mean(axis=0) if intercept is not None else matrix
+            response = target - target.mean() if intercept is not None else target
+            norms = np.linalg.norm(centered, axis=0)
+            normalized = centered / np.maximum(norms, 1e-12)
+            gram, correlation = normalized.T @ normalized, normalized.T @ response
+            determinant = 1 - gram**2
+            valid = np.triu(np.ones_like(gram, dtype=bool), 1) & (determinant > 1e-10)
+            valid &= (norms[:, None] > 1e-10) & (norms[None, :] > 1e-10)
+            explained = (correlation[:, None]**2 + correlation[None, :]**2 -
+                         2*gram*correlation[:, None]*correlation[None, :]) / np.maximum(determinant, 1e-10)
+            explained[~valid] = -np.inf
+            counts["pair_screened"] += int(valid.sum())
+            pairs = [tuple(map(int, np.unravel_index(i, gram.shape))) for i in
+                     np.argsort(-explained, axis=None, kind="stable")[:96] if np.isfinite(explained.flat[i])]
         beam = [()]
-        for _ in range(3 if "add" in grammar.tokens else 1):
+        for depth in range(3 if "add" in grammar.tokens else 1):
             fits = {}
+            choices = set(pairs if depth == 1 else [])
             for selected in beam:
+                # Conditional correlations are recomputed after each partial fit;
+                # a useful complementary term need not correlate strongly with y.
+                current = np.column_stack((base, matrix[:, selected]))
+                if current.shape[1]:
+                    counts["residual_projections"] += 1
+                    u, singular, _ = np.linalg.svd(current, full_matrices=False)
+                    q = u[:, singular > max(singular[0], 1e-12)*1e-12]
+                    residual = target - q @ (q.T @ target)
+                    remaining = matrix - q @ (q.T @ matrix)
+                else:
+                    residual, remaining = target, matrix
+                norm = np.linalg.norm(remaining, axis=0)
+                correlation = np.abs(remaining.T @ residual) / np.maximum(norm, 1e-12)
+                correlation[norm < 1e-10] = -np.inf
+                indices = np.argsort(-correlation, kind="stable")[:48]
                 for j in indices:
                     choice = tuple(sorted(set(selected) | {int(j)}))
-                    if len(choice) != len(selected) + 1 or choice in fits:
-                        continue
-                    design = np.column_stack((base, matrix[:, choice]))
-                    norms = np.linalg.norm(design, axis=0)
-                    norms[norms == 0] = 1.
-                    counts["linear_subproblems"] += 1
-                    try:
-                        coef = np.linalg.lstsq(design / norms, target, rcond=None)[0] / norms
-                    except np.linalg.LinAlgError:
-                        continue
-                    estimate = design @ coef
-                    prediction = estimate if denominator is None else estimate / denominator[2]
-                    error = float(np.mean((prediction - y) ** 2))
-                    terms = [(intercept, np.array([coef[0]]))] if intercept is not None else []
-                    for index, weight in zip(choice, coef[len(base.T):]):
-                        term, c, _ = available[index]
-                        multiplier = constants[sub(target_units, term.units)]
-                        terms.append((operator("mul", multiplier, term), np.r_[weight, c]))
-                    tree, c = balanced(terms)
-                    if denominator is not None:
-                        tree, c = operator("div", tree, denominator[0]), np.r_[c, denominator[1]]
-                    if tree.size > grammar.max_nodes or tree.depth > grammar.max_depth or not np.isfinite(error):
-                        continue
-                    tree, c = tree.canonical(c)
-                    try:
-                        grammar.trace(tree)
-                    except (ValueError, KeyError):
-                        continue
-                    fits[choice] = error
-                    score = error / max(float(np.var(y)), 1e-12) + 1e-8 * tree.size
-                    if tree not in proposals or score < proposals[tree][0]:
-                        proposals[tree] = score, c
-            beam = sorted(fits, key=lambda k: (fits[k], k))[:3]
+                    if len(choice) == len(selected) + 1:
+                        choices.add(choice)
+            for choice in sorted(choices):
+                design = np.column_stack((base, matrix[:, choice]))
+                norms = np.linalg.norm(design, axis=0)
+                norms[norms == 0] = 1.
+                counts["linear_subproblems"] += 1
+                try:
+                    coef = np.linalg.lstsq(design / norms, target, rcond=None)[0] / norms
+                except np.linalg.LinAlgError:
+                    continue
+                estimate = design @ coef
+                prediction = estimate if denominator is None else estimate / denominator[2]
+                error = float(np.mean((prediction - y) ** 2))
+                terms = [(intercept, np.array([coef[0]]))] if intercept is not None else []
+                for index, weight in zip(choice, coef[len(base.T):]):
+                    term, c, _ = available[index]
+                    multiplier = constants[sub(target_units, term.units)]
+                    terms.append((operator("mul", multiplier, term), np.r_[weight, c]))
+                tree, c = balanced(terms)
+                if denominator is not None:
+                    tree, c = operator("div", tree, denominator[0]), np.r_[c, denominator[1]]
+                if tree.size > grammar.max_nodes or tree.depth > grammar.max_depth or not np.isfinite(error):
+                    continue
+                tree, c = tree.canonical(c)
+                try:
+                    grammar.trace(tree)
+                except (ValueError, KeyError):
+                    continue
+                fits[choice] = error
+                score = error / max(float(np.var(y)), 1e-12) + 1e-8 * tree.size
+                if tree not in proposals or score < proposals[tree][0]:
+                    proposals[tree] = score, c
+            beam = sorted(fits, key=lambda k: (fits[k], k))[:8]
             if not beam:
                 break
 
@@ -178,5 +218,6 @@ def structured_seeds(grammar, X, y, limit):
             if np.all(np.abs(denominator[2]) > 1e-12):
                 fit_terms(y * denominator[2], add(grammar.target, denominator[0].units), denominator)
     counts["proposed_structures"] = len(proposals)
+    counts["retained_features"] = len(features)
     ranked = sorted(proposals, key=lambda tree: (proposals[tree][0], tree.size, repr(tree)))[:limit]
     return [(tree, proposals[tree][1]) for tree in ranked], counts

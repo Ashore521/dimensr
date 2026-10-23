@@ -18,6 +18,7 @@ from .genetics import fitted_offspring
 from .pareto import first_front, selection_order
 from .seeding import typed_seeds
 from .structure import structured_seeds
+from .intervals import audit_box
 
 
 def _unique(candidates):
@@ -301,6 +302,21 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
                              "elapsed_seconds": time.monotonic() - start}
         return self
 
+    def audit_domain(self, input_bounds=None, *, max_boxes=128):
+        """Numerically screen the selected raw tree on a finite closed box.
+
+        Returns enclosed, invalid (with an observed witness), or unresolved.
+        This does not alter the fitted model or prove formal global validity.
+        """
+        check_is_fitted(self, "best_")
+        bounds = input_bounds if input_bounds is not None else self.diagnostics_.get("interval_bounds")
+        if bounds is None:
+            raise ValueError("No interval box was checked during fitting; provide input_bounds explicitly.")
+        if np.asarray(bounds).shape != (self.n_features_in_, 2):
+            raise ValueError("input_bounds must match the model feature count.")
+        return audit_box(self.best_.tree, self.best_.constants, bounds, max_boxes=max_boxes,
+                         output_bounds=self.config_.output_bounds)
+
     def predict(self, X):
         check_is_fitted(self, "best_")
         X = check_array(X, dtype=float)
@@ -318,7 +334,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
     def save(self, path):
         """Save an inference model as portable JSON, without executable pickle data."""
         check_is_fitted(self, "best_")
-        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.3.0",
+        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.4.0",
                 "config": asdict(self.config_), "n_features": self.n_features_in_,
                 "feature_names": self.feature_names_, "feature_units": [encode(u) for u in self.feature_units_],
                 "target_units": encode(self.target_units_), "constant_units": [encode(u) for u in self.constant_units_],

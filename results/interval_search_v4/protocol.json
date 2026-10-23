@@ -1,0 +1,984 @@
+{
+  "frozen_utc": "2026-10-23T03:59:45Z",
+  "source_hashes": {
+    "src/dimensr/__init__.py": "03a77925405ef543c67980d675445564341f8703237ca8b56a0a31e3d5533f97",
+    "src/dimensr/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "src/dimensr/benchmarks.py": "4ab488b8beea08966a70013a1d3ecbd6393de34b6031db4c9c85edf1a6d55978",
+    "src/dimensr/cli.py": "4e358142fa51a8b2a002e1399b659ca30edadd5660e16ae59334cf64d02d15d9",
+    "src/dimensr/complexity.py": "6261086ebda0b8df2de1cfd5d9d04327e416d9cb881cd133833a400a5d21fe5b",
+    "src/dimensr/config.py": "486600abb379bb179d7c86cfb1352836cd6a61212baeb5dccddbd7fc3d2f5599",
+    "src/dimensr/domains.py": "b2c1485554af84b5923e30dc36df61012c1e70e98b23d979cf690154e610c40e",
+    "src/dimensr/evaluation.py": "58c66a18ba806d1116b7b78d453962621ec26396cdc385d81e26b108339ee7c2",
+    "src/dimensr/expression.py": "324fe34d65ad94261fbfcf2b9d377c52ddea10f579241f6fa63b2cc843b2c78f",
+    "src/dimensr/fitting.py": "faab19e6735effee7a5a76de9c82a4d79d9bd0979406849eb4df1147188e0040",
+    "src/dimensr/genetics.py": "cd1088866844ad565078bd99c287587c014d7c7390242d281feefef5e3a999f3",
+    "src/dimensr/grammar.py": "1a14031fd3fb86aa7ef8734fbe31ad05f2b981597e7efc75aeb834df8b7438d9",
+    "src/dimensr/intervals.py": "8617de09e7204bc1bde0edd7bff7fe54ecc2ec37dd8ac2f3d3fa1027e2ef353c",
+    "src/dimensr/pareto.py": "b01cf8f1798dd2697cf052998ead210964a77cc1fda3a454535a6673bc79a1e9",
+    "src/dimensr/policy.py": "b23af3d05dbd93535b6868e93868286cc73c302a3da5d5297a71d1714ee301e7",
+    "src/dimensr/real_data.py": "0617fe2159b9e39aeaf3b2f8b523c399688cf8b0b4102889a96901ab1b4b9bf7",
+    "src/dimensr/regressor.py": "14d6fae70823ae8945bffb02cf8613484a1ae8958b9020e90bf8863e5e28da0a",
+    "src/dimensr/seeding.py": "391f1ac9734baa2e5486398884f1d3150b4143da838e752e5516dc78924aafe5",
+    "src/dimensr/structure.py": "866639d446b6f0fde2cef7806faba2d761b4634905758d9ad853a1dc1a1d3b77",
+    "src/dimensr/units.py": "33fb584c2e1a25b87bb60381ff5f19f95407b3f112f05e7fd94be25d4c736cde",
+    "examples/interval_search_study.py": "238862586b76f6101a60209d44cb2f6e8d87236fd05ae84c03ae5d05e7bc0d66",
+    "examples/interval_search_cases.json": "b14ffe7c74c075651b47a681150665e993a850b53d6d030532e3cb861efd6953"
+  },
+  "baseline_commit": "cb520c96daf63922b31009e8382ea3a436d731cf",
+  "baseline_hashes": {
+    "src/dimensr/__init__.py": "d13ddd709883ec737579d5ac327c286b2871b50254f1cfea781f90a362ef43d2",
+    "src/dimensr/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "src/dimensr/benchmarks.py": "4ab488b8beea08966a70013a1d3ecbd6393de34b6031db4c9c85edf1a6d55978",
+    "src/dimensr/cli.py": "4e358142fa51a8b2a002e1399b659ca30edadd5660e16ae59334cf64d02d15d9",
+    "src/dimensr/complexity.py": "6261086ebda0b8df2de1cfd5d9d04327e416d9cb881cd133833a400a5d21fe5b",
+    "src/dimensr/config.py": "4147517171d40d925929b022b808b5104162ccd92b923d11c561db6bbc0a13e5",
+    "src/dimensr/domains.py": "b2c1485554af84b5923e30dc36df61012c1e70e98b23d979cf690154e610c40e",
+    "src/dimensr/evaluation.py": "20bfebec5035285333b65fe6f3fbed711b7284c643d6d53ea6271b7b4f5e84fa",
+    "src/dimensr/expression.py": "324fe34d65ad94261fbfcf2b9d377c52ddea10f579241f6fa63b2cc843b2c78f",
+    "src/dimensr/fitting.py": "faab19e6735effee7a5a76de9c82a4d79d9bd0979406849eb4df1147188e0040",
+    "src/dimensr/genetics.py": "cd1088866844ad565078bd99c287587c014d7c7390242d281feefef5e3a999f3",
+    "src/dimensr/grammar.py": "1a14031fd3fb86aa7ef8734fbe31ad05f2b981597e7efc75aeb834df8b7438d9",
+    "src/dimensr/pareto.py": "b01cf8f1798dd2697cf052998ead210964a77cc1fda3a454535a6673bc79a1e9",
+    "src/dimensr/policy.py": "b23af3d05dbd93535b6868e93868286cc73c302a3da5d5297a71d1714ee301e7",
+    "src/dimensr/real_data.py": "0617fe2159b9e39aeaf3b2f8b523c399688cf8b0b4102889a96901ab1b4b9bf7",
+    "src/dimensr/regressor.py": "987da190f8e08ef0c1e8dee0e7a121e5c4baa2a04a7a385af947c8b16e40c337",
+    "src/dimensr/seeding.py": "391f1ac9734baa2e5486398884f1d3150b4143da838e752e5516dc78924aafe5",
+    "src/dimensr/structure.py": "6b5f8576865d43efc290ec8b056700bbf8f14000f0ad0ed2bf02d62c28bdaca1",
+    "src/dimensr/units.py": "33fb584c2e1a25b87bb60381ff5f19f95407b3f112f05e7fd94be25d4c736cde"
+  },
+  "dataset_hashes": {
+    "data/Nguyen-5_s71_fit.npz": "f268db4c097545e2cf0c10e664083d69c118c077511d38969680852d6a69ff7a",
+    "data/Nguyen-5_s71_holdout.npz": "56497e7ebff8a5d844b91d0bdb3a69cd4285634d363a5557d84208ac6b567cb1",
+    "data/Nguyen-5_s82_fit.npz": "6d0bd1db7a2602492f96614a3713b40c71bc55a757984514dfc04494c9b789bf",
+    "data/Nguyen-5_s82_holdout.npz": "844f3dcdfde8a9a74ffc1180316db3423b05a7c1eac600d1b2d6ec323ebb9e75",
+    "data/Nguyen-5_s93_fit.npz": "d5fe4eebe16ff83c2460eec7ad2734a6021482aecaf0faab8bdee69076deda1a",
+    "data/Nguyen-5_s93_holdout.npz": "b92207e74e8eb008f8b7ca834527816015a201e241edc00c8376ebb19ac39fbc",
+    "data/Nguyen-7_s71_fit.npz": "bcc6dd85aceb5bc3bab4e25c80cdf54d663c1892cdcc863ea0a8fdaaa97f93ef",
+    "data/Nguyen-7_s71_holdout.npz": "44f219be5320f1dc624d9125838edd8a4b84474814abd9b479daab8a6aca8fbd",
+    "data/Nguyen-7_s82_fit.npz": "26c336d77ba2f03d1de078c3bb50d70e1eae7360a2df9516a653ec6d3c11e25c",
+    "data/Nguyen-7_s82_holdout.npz": "c04c9d42a1c772e12bd70206f816b38f6a66c8633ee07fbd7e5a2d510f0422f5",
+    "data/Nguyen-7_s93_fit.npz": "2ac6c1238be17d53ce399f35a266ea278e98eaf5ffa02c1cf69511603fae36a6",
+    "data/Nguyen-7_s93_holdout.npz": "2b61e71c688ee8e7070df739ce23829e4ccaeb4f8bb601c7f4e70e4be402f741",
+    "data/Feynman-I.18.4_s71_fit.npz": "3465f60710de9edea61c8a32b41be14fb9ea7c32202934fe8a919c078bc3ed7d",
+    "data/Feynman-I.18.4_s71_holdout.npz": "5fbb473427ff5d8f953346faf95ddb56e6efa0652c21838eb117a0b4da116630",
+    "data/Feynman-I.18.4_s82_fit.npz": "80bad59ad5903d4753b8a15e219f938cf3a1c822191bd0178792f7ad8db79395",
+    "data/Feynman-I.18.4_s82_holdout.npz": "4a9b7093a942c387e0ae71d9f3d5212405ace332d7ed0e214172090d7f16c681",
+    "data/Feynman-I.18.4_s93_fit.npz": "c404de8600a560f956a471e7c0fb8390ca50717fd06c9466a6c828cad3d7043d",
+    "data/Feynman-I.18.4_s93_holdout.npz": "e58e074a4882c95ba355ff5ad081bac88a24ce643be16d95d51e9c45da8ff95e",
+    "data/Feynman-I.10.7_s71_fit.npz": "68dfb88230df8e89c505b8876f8d7851ae47c36c9a9c751cd67dea5bddc7874f",
+    "data/Feynman-I.10.7_s71_holdout.npz": "49390d1d00b518646c4e882936fb2a169ec225ac38f2f1f4304c301f471e67a1",
+    "data/Feynman-I.10.7_s82_fit.npz": "a7b9fd2b68f545db8a5da166732b1e343cd1848901be82ed3d557ec5fade8879",
+    "data/Feynman-I.10.7_s82_holdout.npz": "a045e06e7d789cc45a396ab2823fb4947a98ac43bf874e97aba9e167a4da44bc",
+    "data/Feynman-I.10.7_s93_fit.npz": "1cdbf1868227b953fc8262522056b0f70eeba25148533afbe43c621bff3fd924",
+    "data/Feynman-I.10.7_s93_holdout.npz": "f71b40cb986aa84b8069959f26f522df58f9ecb98f4d7087450391536509ff79",
+    "data/Transfer-exp-product_s71_fit.npz": "26eb49234ccaf0b14ee4d9fbaf91929bbaff5d4158e397d1b6bdc8b3ad8b4656",
+    "data/Transfer-exp-product_s71_holdout.npz": "0602da65b5c52b371c68f825aa538a1f95285c6bfc6299c7cc725dcdeedcc677",
+    "data/Transfer-exp-product_s82_fit.npz": "c34f2499271c104e39a53527f74ef72bb5130c3444feade55f5ce78b18100f88",
+    "data/Transfer-exp-product_s82_holdout.npz": "1ec08f842cfc92aa7d16229439baea0dcc7ca8aa40443029562d0b29a339d68a",
+    "data/Transfer-exp-product_s93_fit.npz": "480d05748267f35469637ddf841f706ebe53bb67c555365051653f00dec9b647",
+    "data/Transfer-exp-product_s93_holdout.npz": "77b81d79f7abea1312ee182449a3bbbf0b997421aed6b4e4ab25f0f64eb75949",
+    "data/Transfer-saturation_s71_fit.npz": "458b25e72560d39a697a5bba657723c683f1195a4eb4d5d2bdc56bb237d3cecd",
+    "data/Transfer-saturation_s71_holdout.npz": "2c0a4660905641c1872ed5553c425d7caf0fc5505df8cb49c901c03700dee94f",
+    "data/Transfer-saturation_s82_fit.npz": "7c414b311a69b16009946f7382a3d296499150417a88e92435118c903fc36f41",
+    "data/Transfer-saturation_s82_holdout.npz": "6a72aea128fd3bf5b920704aef15a3c4bbe44dfa07de7d888ba47b71f8cb3345",
+    "data/Transfer-saturation_s93_fit.npz": "d73ef627249fa698e15a77716ba9da2aadf60748a9b801318906920a516b6014",
+    "data/Transfer-saturation_s93_holdout.npz": "62b4d722e767d3885e70a080d7a0bc5954e7ed65cc761aa3854ec3156e14d437"
+  },
+  "config": {
+    "population_size": 48,
+    "epochs": 8,
+    "gp_generations": 2,
+    "selection_generations": 6,
+    "max_nodes": 21,
+    "max_depth": 7,
+    "max_evaluations": 2048,
+    "rademacher_draws": 32,
+    "operators": [
+      "add",
+      "sub",
+      "mul",
+      "div",
+      "square",
+      "sqrt",
+      "sin",
+      "cos",
+      "exp",
+      "log"
+    ]
+  },
+  "cases": {
+    "Nguyen-5": {
+      "source": "DSO benchmarks.csv: Nguyen-5",
+      "names": [
+        "x"
+      ],
+      "truth": "sin(x**2)*cos(x)-1",
+      "bounds": [
+        [
+          -1,
+          1
+        ]
+      ],
+      "ood": [
+        [
+          1,
+          2
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "domain": "box",
+      "domain_bounds": [
+        [
+          -1,
+          2
+        ]
+      ],
+      "interval_bounds": [
+        [
+          -1,
+          2
+        ]
+      ]
+    },
+    "Nguyen-7": {
+      "source": "DSO benchmarks.csv: Nguyen-7",
+      "names": [
+        "x"
+      ],
+      "truth": "log(x+1)+log(x**2+1)",
+      "bounds": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ood": [
+        [
+          2,
+          3
+        ]
+      ],
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "domain": "box",
+      "domain_bounds": [
+        [
+          0,
+          3
+        ]
+      ],
+      "interval_bounds": [
+        [
+          0,
+          3
+        ]
+      ]
+    },
+    "Feynman-I.18.4": {
+      "source": "PhySO FeynmanEquations.csv: I.18.4; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "m1",
+        "m2",
+        "r1",
+        "r2"
+      ],
+      "truth": "(m1*r1+m2*r2)/(m1+m2)",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          7
+        ]
+      ],
+      "units": [
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "domain": "positive_total_mass",
+      "domain_bounds": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ],
+      "interval_bounds": [
+        [
+          0.1,
+          7
+        ],
+        [
+          0.1,
+          7
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          7
+        ]
+      ]
+    },
+    "Feynman-I.10.7": {
+      "source": "PhySO FeynmanEquations.csv: I.10.7; units.csv converted to L,M,T,I,Theta,N,J",
+      "names": [
+        "m",
+        "v",
+        "c"
+      ],
+      "truth": "m/sqrt(1-v**2/c**2)",
+      "bounds": [
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          10
+        ]
+      ],
+      "ood": [
+        [
+          5,
+          7
+        ],
+        [
+          2,
+          2.8
+        ],
+        [
+          10,
+          14
+        ]
+      ],
+      "units": [
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          -1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "domain": "subluminal",
+      "domain_bounds": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          2.8
+        ],
+        [
+          3,
+          14
+        ]
+      ],
+      "interval_bounds": [
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          2.8
+        ],
+        [
+          3,
+          14
+        ]
+      ]
+    },
+    "Transfer-exp-product": {
+      "source": "New exploratory composition task; selected after initializer design, not blind",
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "names": [
+        "x",
+        "y"
+      ],
+      "truth": "exp(x)*cos(y)+0.2*x*y",
+      "bounds": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "ood": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "domain_bounds": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "domain": "box",
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "interval_bounds": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ]
+    },
+    "Transfer-saturation": {
+      "source": "New exploratory rational task; selected after initializer design, not blind",
+      "scope": "reused development/regression formula; fresh samples, not blind",
+      "names": [
+        "x"
+      ],
+      "truth": "1.7*x/(0.8+x)",
+      "bounds": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ood": [
+        [
+          2,
+          4
+        ]
+      ],
+      "domain_bounds": [
+        [
+          0,
+          4
+        ]
+      ],
+      "domain": "box",
+      "units": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "target": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "interval_bounds": [
+        [
+          0,
+          4
+        ]
+      ]
+    }
+  },
+  "jobs": [
+    {
+      "id": "Nguyen-5_s71_v03",
+      "data_key": "Nguyen-5_s71",
+      "case": "Nguyen-5",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-5_s71_search_only",
+      "data_key": "Nguyen-5_s71",
+      "case": "Nguyen-5",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-5_s71_v04",
+      "data_key": "Nguyen-5_s71",
+      "case": "Nguyen-5",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Nguyen-5_s82_v03",
+      "data_key": "Nguyen-5_s82",
+      "case": "Nguyen-5",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-5_s82_search_only",
+      "data_key": "Nguyen-5_s82",
+      "case": "Nguyen-5",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-5_s82_v04",
+      "data_key": "Nguyen-5_s82",
+      "case": "Nguyen-5",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Nguyen-5_s93_v03",
+      "data_key": "Nguyen-5_s93",
+      "case": "Nguyen-5",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-5_s93_search_only",
+      "data_key": "Nguyen-5_s93",
+      "case": "Nguyen-5",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-5_s93_v04",
+      "data_key": "Nguyen-5_s93",
+      "case": "Nguyen-5",
+      "seed": 93,
+      "variant": "v04"
+    },
+    {
+      "id": "Nguyen-7_s71_v03",
+      "data_key": "Nguyen-7_s71",
+      "case": "Nguyen-7",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-7_s71_search_only",
+      "data_key": "Nguyen-7_s71",
+      "case": "Nguyen-7",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-7_s71_v04",
+      "data_key": "Nguyen-7_s71",
+      "case": "Nguyen-7",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Nguyen-7_s82_v03",
+      "data_key": "Nguyen-7_s82",
+      "case": "Nguyen-7",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-7_s82_search_only",
+      "data_key": "Nguyen-7_s82",
+      "case": "Nguyen-7",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-7_s82_v04",
+      "data_key": "Nguyen-7_s82",
+      "case": "Nguyen-7",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Nguyen-7_s93_v03",
+      "data_key": "Nguyen-7_s93",
+      "case": "Nguyen-7",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Nguyen-7_s93_search_only",
+      "data_key": "Nguyen-7_s93",
+      "case": "Nguyen-7",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Nguyen-7_s93_v04",
+      "data_key": "Nguyen-7_s93",
+      "case": "Nguyen-7",
+      "seed": 93,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.18.4_s71_v03",
+      "data_key": "Feynman-I.18.4_s71",
+      "case": "Feynman-I.18.4",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.18.4_s71_search_only",
+      "data_key": "Feynman-I.18.4_s71",
+      "case": "Feynman-I.18.4",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.18.4_s71_v04",
+      "data_key": "Feynman-I.18.4_s71",
+      "case": "Feynman-I.18.4",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.18.4_s82_v03",
+      "data_key": "Feynman-I.18.4_s82",
+      "case": "Feynman-I.18.4",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.18.4_s82_search_only",
+      "data_key": "Feynman-I.18.4_s82",
+      "case": "Feynman-I.18.4",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.18.4_s82_v04",
+      "data_key": "Feynman-I.18.4_s82",
+      "case": "Feynman-I.18.4",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.18.4_s93_v03",
+      "data_key": "Feynman-I.18.4_s93",
+      "case": "Feynman-I.18.4",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.18.4_s93_search_only",
+      "data_key": "Feynman-I.18.4_s93",
+      "case": "Feynman-I.18.4",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.18.4_s93_v04",
+      "data_key": "Feynman-I.18.4_s93",
+      "case": "Feynman-I.18.4",
+      "seed": 93,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.10.7_s71_v03",
+      "data_key": "Feynman-I.10.7_s71",
+      "case": "Feynman-I.10.7",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.10.7_s71_search_only",
+      "data_key": "Feynman-I.10.7_s71",
+      "case": "Feynman-I.10.7",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.10.7_s71_v04",
+      "data_key": "Feynman-I.10.7_s71",
+      "case": "Feynman-I.10.7",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.10.7_s82_v03",
+      "data_key": "Feynman-I.10.7_s82",
+      "case": "Feynman-I.10.7",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.10.7_s82_search_only",
+      "data_key": "Feynman-I.10.7_s82",
+      "case": "Feynman-I.10.7",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.10.7_s82_v04",
+      "data_key": "Feynman-I.10.7_s82",
+      "case": "Feynman-I.10.7",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Feynman-I.10.7_s93_v03",
+      "data_key": "Feynman-I.10.7_s93",
+      "case": "Feynman-I.10.7",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Feynman-I.10.7_s93_search_only",
+      "data_key": "Feynman-I.10.7_s93",
+      "case": "Feynman-I.10.7",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Feynman-I.10.7_s93_v04",
+      "data_key": "Feynman-I.10.7_s93",
+      "case": "Feynman-I.10.7",
+      "seed": 93,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-exp-product_s71_v03",
+      "data_key": "Transfer-exp-product_s71",
+      "case": "Transfer-exp-product",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-exp-product_s71_search_only",
+      "data_key": "Transfer-exp-product_s71",
+      "case": "Transfer-exp-product",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-exp-product_s71_v04",
+      "data_key": "Transfer-exp-product_s71",
+      "case": "Transfer-exp-product",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-exp-product_s82_v03",
+      "data_key": "Transfer-exp-product_s82",
+      "case": "Transfer-exp-product",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-exp-product_s82_search_only",
+      "data_key": "Transfer-exp-product_s82",
+      "case": "Transfer-exp-product",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-exp-product_s82_v04",
+      "data_key": "Transfer-exp-product_s82",
+      "case": "Transfer-exp-product",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-exp-product_s93_v03",
+      "data_key": "Transfer-exp-product_s93",
+      "case": "Transfer-exp-product",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-exp-product_s93_search_only",
+      "data_key": "Transfer-exp-product_s93",
+      "case": "Transfer-exp-product",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-exp-product_s93_v04",
+      "data_key": "Transfer-exp-product_s93",
+      "case": "Transfer-exp-product",
+      "seed": 93,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-saturation_s71_v03",
+      "data_key": "Transfer-saturation_s71",
+      "case": "Transfer-saturation",
+      "seed": 71,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-saturation_s71_search_only",
+      "data_key": "Transfer-saturation_s71",
+      "case": "Transfer-saturation",
+      "seed": 71,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-saturation_s71_v04",
+      "data_key": "Transfer-saturation_s71",
+      "case": "Transfer-saturation",
+      "seed": 71,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-saturation_s82_v03",
+      "data_key": "Transfer-saturation_s82",
+      "case": "Transfer-saturation",
+      "seed": 82,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-saturation_s82_search_only",
+      "data_key": "Transfer-saturation_s82",
+      "case": "Transfer-saturation",
+      "seed": 82,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-saturation_s82_v04",
+      "data_key": "Transfer-saturation_s82",
+      "case": "Transfer-saturation",
+      "seed": 82,
+      "variant": "v04"
+    },
+    {
+      "id": "Transfer-saturation_s93_v03",
+      "data_key": "Transfer-saturation_s93",
+      "case": "Transfer-saturation",
+      "seed": 93,
+      "variant": "v03"
+    },
+    {
+      "id": "Transfer-saturation_s93_search_only",
+      "data_key": "Transfer-saturation_s93",
+      "case": "Transfer-saturation",
+      "seed": 93,
+      "variant": "search_only"
+    },
+    {
+      "id": "Transfer-saturation_s93_v04",
+      "data_key": "Transfer-saturation_s93",
+      "case": "Transfer-saturation",
+      "seed": 93,
+      "variant": "v04"
+    }
+  ],
+  "timeout_seconds": 240,
+  "workers": 3,
+  "noise": 0,
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "torch": "2.14.1+cpu",
+      "sympy": "1.14.0",
+      "scikit-learn": "1.9.1"
+    }
+  },
+  "comparison": "Same unique-tree ceiling; count feature previews, pair screening, projections, linear fits and interval boxes separately. Not equal compute.",
+  "domain_information": "All variants receive identical unlabelled domain points and declared boxes spanning the interpolation/extrapolation ranges. Zero-mass faces outside the positive-mass box use explicit probes only.",
+  "primary": "Final raw-tree NRMSE < 1e-6 on all four holdout splits; no invalid intermediate.",
+  "secondary": "Any saved Pareto candidate with the same criterion; final IID R2 > .999; timings and extra work.",
+  "scope": "Six reused regression tasks, fresh samples and seeds, no noise. Extended input contract is supplied to all methods. No blind task or superiority claim."
+}

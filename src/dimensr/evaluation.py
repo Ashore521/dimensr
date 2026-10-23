@@ -7,6 +7,7 @@ from scipy.optimize import least_squares
 from .complexity import local_rademacher, mixed_complexity
 from .fitting import affine_constants, linear_solution, repair_domains
 from .domains import domain_probes
+from .intervals import audit_box
 
 
 def target_scale(y):
@@ -51,10 +52,13 @@ class Evaluator:
         self.failures = Counter()
         self.optimizer_status = Counter()
         self.domain_rejections = 0
+        self.interval_statuses = Counter()
+        self.interval_boxes_checked = 0
         rng = np.random.default_rng(np.random.SeedSequence([config.random_state, 721]))
         self.signs = rng.choice([-1.0, 1.0], (config.rademacher_draws, len(y)))
         self.X_probe, self.domain_audit = domain_probes(X, config, input_bounds=input_bounds, X_domain=X_domain)
         self.X_feasible = np.vstack((X, self.X_probe))
+        self.interval_bounds = self.domain_audit["input_bounds"] if config.interval_checks and (config.boundary_probes or input_bounds is not None) else None
 
     def admissible(self, prediction):
         if not np.isfinite(prediction).all():
@@ -107,6 +111,13 @@ class Evaluator:
             with np.errstate(all="ignore"):
                 mse = np.mean(((pred - self.y) / self.scale) ** 2)
             if np.isfinite(mse) and mse < best_error:
+                if self.interval_bounds is not None:
+                    audit = audit_box(tree, c, self.interval_bounds, max_boxes=cfg.interval_max_boxes,
+                                      output_bounds=cfg.output_bounds)
+                    self.interval_statuses[audit["status"]] += 1
+                    self.interval_boxes_checked += audit["boxes_checked"]
+                    if audit["status"] != "enclosed":
+                        return
                 best, best_error = c.copy(), float(mse)
 
         starts = [np.full(tree.n_constants, min(1.0, cfg.constant_bound * 0.5))]
@@ -178,6 +189,8 @@ class Evaluator:
                 "failure_counts": dict(self.failures), "optimizer_status": dict(self.optimizer_status),
                 "domain_probe_count": len(self.X_probe), "rademacher_evaluations": self.rademacher_evaluations,
                 "domain_rejections": self.domain_rejections, "domain_audit": self.domain_audit,
+                "interval_bounds": self.interval_bounds, "interval_statuses": dict(self.interval_statuses),
+                "interval_boxes_checked": self.interval_boxes_checked,
                 "rademacher_family": "local coefficient-Jacobian output ball",
                 "rademacher_complexity_scale": float(np.sqrt(len(self.X)) / self.config.perturbation_radius)
                 if self.config.perturbation_radius else 0.0}

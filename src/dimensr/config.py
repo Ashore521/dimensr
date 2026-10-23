@@ -38,6 +38,8 @@ class SearchConfig:
     linear_seeds: bool = True
     structured_seeds: bool = True
     boundary_probes: bool = True
+    interval_checks: bool = True
+    interval_max_boxes: int = 32
     output_bounds: tuple | None = None
     domain_probe_count: int = 32
     validation_fraction: float = 0.2
@@ -51,12 +53,12 @@ class SearchConfig:
 
     def validate(self):
         for name in ("use_rnn", "use_gp", "use_units", "use_size_diversity", "use_rademacher", "linear_seeds",
-                     "structured_seeds", "boundary_probes"):
+                     "structured_seeds", "boundary_probes", "interval_checks"):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be a boolean.")
         for name in ("population_size", "epochs", "max_nodes", "max_depth", "hidden_size",
                      "min_candidates", "rademacher_draws", "perturbations", "constant_restarts",
-                     "constant_max_nfev", "max_evaluations", "polish_max_nfev", "variation_attempts"):
+                     "constant_max_nfev", "max_evaluations", "polish_max_nfev", "variation_attempts", "interval_max_boxes"):
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
                 raise ValueError(f"{name} must be a positive integer.")

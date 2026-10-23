@@ -1,5 +1,15 @@
 # Validation record
 
+Version **0.4.0**, 2026-10-23: **89 tests passed**. The new
+[interval/complementary-search study](INTERVAL_SEARCH_RESULTS.zh-CN.md) completed
+54/54 fits. Strict recovery was 12/18 for contemporaneous frozen 0.3, 16/18 for
+search-only changes, and 18/18 for full 0.4 on six reused noiseless tasks. Independent
+verification covered 54 models and 716 saved trees; all 201 full-0.4 saved tree
+records passed declared-box interval screening. One preselected replay matched all
+non-timing state and predictions exactly. The prior known pole was unresolved with
+32 boxes and produced an actual witness after 80 boxes with allowance 128.
+Numerical interval screening is conservative and is not a formal certificate.
+
 Version **0.3.0**, 2026-10-23: **79 tests passed**; wheel/sdist built and an isolated
 wheel installation passed the declared-domain CLI and save/load smoke check.
 The [boundary and search study](BOUNDARY_SEARCH_RESULTS.zh-CN.md) completed 54/54
