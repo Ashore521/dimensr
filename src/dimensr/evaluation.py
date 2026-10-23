@@ -6,6 +6,7 @@ import numpy as np
 from scipy.optimize import least_squares
 from .complexity import local_rademacher, mixed_complexity
 from .fitting import affine_constants, linear_solution, repair_domains
+from .domains import domain_probes
 
 
 def target_scale(y):
@@ -33,7 +34,7 @@ class Candidate:
 
 
 class Evaluator:
-    def __init__(self, X, y, config):
+    def __init__(self, X, y, config, *, input_bounds=None, X_domain=None):
         self.X, self.y, self.config = X, y, config
         self.scale = target_scale(y)
         self.cache = {}
@@ -49,12 +50,11 @@ class Evaluator:
         self.rademacher_evaluations = 0
         self.failures = Counter()
         self.optimizer_status = Counter()
+        self.domain_rejections = 0
         rng = np.random.default_rng(np.random.SeedSequence([config.random_state, 721]))
         self.signs = rng.choice([-1.0, 1.0], (config.rademacher_draws, len(y)))
-        probe_rng = np.random.default_rng(np.random.SeedSequence([config.random_state, 723]))
-        pairs = probe_rng.integers(len(X), size=(config.domain_probe_count, 2))
-        weight = probe_rng.uniform(0, 1, (config.domain_probe_count, 1))
-        self.X_probe = weight * X[pairs[:, 0]] + (1 - weight) * X[pairs[:, 1]]
+        self.X_probe, self.domain_audit = domain_probes(X, config, input_bounds=input_bounds, X_domain=X_domain)
+        self.X_feasible = np.vstack((X, self.X_probe))
 
     def admissible(self, prediction):
         if not np.isfinite(prediction).all():
@@ -102,6 +102,7 @@ class Evaluator:
             if not self.admissible(pred):
                 return
             if len(self.X_probe) and not self.admissible(tree.evaluate(self.X_probe, c)):
+                self.domain_rejections += 1
                 return
             with np.errstate(all="ignore"):
                 mse = np.mean(((pred - self.y) / self.scale) ** 2)
@@ -129,7 +130,7 @@ class Evaluator:
                           for _ in range(cfg.constant_restarts - 1))
         feasible = []
         for initial in starts:
-            repaired = repair_domains(tree, self.X, initial, cfg.constant_bound)
+            repaired = repair_domains(tree, self.X_feasible, initial, cfg.constant_bound)
             if not np.array_equal(repaired, initial):
                 self.domain_repairs += 1
             if np.isfinite(evaluate(repaired)).all():
@@ -138,7 +139,7 @@ class Evaluator:
             for _ in range(cfg.domain_restarts):
                 initial = np.clip(rng.normal(size=tree.n_constants) * 10 ** rng.uniform(-3, 3),
                                   -cfg.constant_bound, cfg.constant_bound)
-                repaired = repair_domains(tree, self.X, initial, cfg.constant_bound)
+                repaired = repair_domains(tree, self.X_feasible, initial, cfg.constant_bound)
                 if np.isfinite(evaluate(repaired)).all():
                     feasible.append(repaired)
         for initial in feasible:
@@ -176,6 +177,7 @@ class Evaluator:
                 "warm_starts": self.warm_starts, "refinements": self.refinements,
                 "failure_counts": dict(self.failures), "optimizer_status": dict(self.optimizer_status),
                 "domain_probe_count": len(self.X_probe), "rademacher_evaluations": self.rademacher_evaluations,
+                "domain_rejections": self.domain_rejections, "domain_audit": self.domain_audit,
                 "rademacher_family": "local coefficient-Jacobian output ball",
                 "rademacher_complexity_scale": float(np.sqrt(len(self.X)) / self.config.perturbation_radius)
                 if self.config.perturbation_radius else 0.0}

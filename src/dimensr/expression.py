@@ -76,22 +76,29 @@ class Node:
 
     def evaluate(self, X, constants):
         it = iter(constants)
+        invalid = np.zeros(len(X), dtype=bool)
 
         def visit(node):
+            nonlocal invalid
             if not node.children:
-                return X[:, int(node.token[1:])] if node.token.startswith("x") else next(it)
-            a = visit(node.children[0])
-            if len(node.children) == 2:
-                b = visit(node.children[1])
-                return {"add": np.add, "sub": np.subtract, "mul": np.multiply,
-                        "div": np.divide}[node.token](a, b)
-            return {"neg": np.negative, "square": np.square, "sqrt": np.sqrt,
-                    "sin": np.sin, "cos": np.cos, "exp": np.exp, "log": np.log}[node.token](a)
+                value = X[:, int(node.token[1:])] if node.token.startswith("x") else next(it)
+            else:
+                a = visit(node.children[0])
+                if len(node.children) == 2:
+                    b = visit(node.children[1])
+                    value = {"add": np.add, "sub": np.subtract, "mul": np.multiply,
+                             "div": np.divide}[node.token](a, b)
+                else:
+                    value = {"neg": np.negative, "square": np.square, "sqrt": np.sqrt,
+                             "sin": np.sin, "cos": np.cos, "exp": np.exp, "log": np.log}[node.token](a)
+            invalid |= ~np.isfinite(value)
+            return value
 
         if len(constants) != self.n_constants:
             raise ValueError("Incorrect number of constants.")
         with np.errstate(all="ignore"):
-            result = np.broadcast_to(visit(self), (len(X),)).copy()
+            result = np.broadcast_to(visit(self), (len(X),)).astype(float, copy=True)
+        result[invalid] = np.nan
         return result
 
     def sympy(self, constants, feature_names=None):

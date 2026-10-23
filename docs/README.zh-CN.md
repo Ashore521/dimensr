@@ -4,6 +4,8 @@ DimenSR 是按项目中的“量纲约束 RNN-GP”设计方案实现的符号�
 
 新增[验收方案](ACCEPTANCE_PROTOCOL.zh-CN.md)和[实测验收报告](ACCEPTANCE_RESULTS.zh-CN.md)：依据 PhySO/DSO 论文及固定源码，完成 8 个方程、3 个种子、2 种噪声及模块消融共 126 次运行。主对照实际运行原版 PhySO；DSO 旧依赖环境尚未具备，明确列为缺口。报告同时检查候选发现、最终优选、量纲和原始表达式定义域。
 
+0.3 增加原始树逐节点定义域检查、显式无标签边界输入、复合函数和公共分母结构初始化。新一轮[对比方案](BOUNDARY_SEARCH_PROTOCOL.zh-CN.md)和[实测结果](BOUNDARY_SEARCH_RESULTS.zh-CN.md)单独保存实验数据：54 次拟合完成，严格数值恢复从 2/18 提高到 12/18；同时记录仍未恢复的任务和外推极点反例。旧报告仍对应其冻结版本。
+
 ## 安装和运行
 
 在仓库目录建立 Python 3.10 或以上版本的虚拟环境。Windows PowerShell：
@@ -67,6 +69,8 @@ dimensr predict --model outputs/model.json --data new_measurements.csv --output 
 | `variation_attempts` | 4 | GP 遇到重复结构时的最多尝试次数 |
 | `elite_fraction` | 0.25 | 跨轮保留精英的比例；第一阶段也按规模保留代表 |
 | `linear_seeds` | `true` | 加入量纲合法的单项、多项初始结构 |
+| `structured_seeds` | `true` | 用训练数据构造复合函数及稀疏加法/公共分母初始树 |
+| `boundary_probes` | `true` | 检查训练范围端点、中点、域内零点及有界数量的组合点 |
 | `domain_restarts` | 4 | 初值均无效时的多尺度常数初始化尝试数 |
 | `polish_candidates`, `polish_max_nfev` | 8, 160 | 搜索后精调的模型数与每次系数优化上限 |
 | `output_bounds` | `null` | 可选输出范围，例如 `[0,null]` 要求非负 |
@@ -79,7 +83,27 @@ dimensr predict --model outputs/model.json --data new_measurements.csv --output 
 
 默认支持 `add, sub, mul, div, square, sin, cos`；还可启用 `neg, sqrt, exp, log`。对数和平方根使用真实数学定义，除零和溢出会使候选无效。若新数据超出模型定义域，预测会明确报错。
 
-`output_bounds` 必须来自领域知识，并使用输入目标数值的单位。例如强度非负可以设 `[0,null]`；不要从测试标签反推上下界。它参与候选接受和验证选择，`predict` 对违规预测报错，不会裁剪输出。有限检查点不能证明整个连续输入域均安全；对于类别变量或受特殊几何约束的输入，可将 `domain_probe_count` 设为 0。
+`output_bounds` 必须来自领域知识，并使用输入目标数值的单位。例如强度非负可以设 `[0,null]`；不要从测试标签反推上下界。它参与候选接受和验证选择，`predict` 对违规预测报错，不会裁剪输出。有限检查点不能证明整个连续输入域均安全。
+
+## 声明合法输入域
+
+默认边界检查来自实际训练子集的逐列最小/最大值，包括各轴端点、中点和范围内的零点。组合不超过 256 个时全取，超过时固定种子采样 256 个，并始终保留各轴检查点。正数训练区间不会自动外推到零；若零点本来就属于应用域，应显式声明：
+
+```python
+model.fit(X, y, X_val=X_val, y_val=y_val,
+          input_bounds=[[0, 5], [0, 10]],  # 每个特征的闭区间，须包含训练输入
+          X_domain=[[0, 1], [1, 0]])       # 可另加合法输入点，不接收其目标标签
+```
+
+`input_bounds` 声明的是整个矩形域，必须确认其角点也有物理意义。对于 `m1+m2>0`、类别变量或受几何约束的输入，应设置 `SearchConfig(boundary_probes=False, domain_probe_count=0)`，仅通过 `X_domain` 提供允许的组合；这时不要再传矩形 `input_bounds`。显式声明矩形会启用该矩形检查，即使自动 `boundary_probes` 关闭。输入域不会从未知真值或测试标签推断。
+
+CLI 对应 `--domain permitted_inputs.csv --input-bounds bounds.json`。域 CSV 只需与训练相同的特征列，JSON 文件内容为 `[[0,5],[0,10]]` 这样的二维数组。两项均可单独使用。
+
+所有候选都经过训练点和域检查点筛查，之后还会在验证集上检查。每个原始中间节点都必须有限：`x²/x`、`1/(1/x)` 在零点会被拒绝，`log(0)` 非法，`sqrt(0)` 合法；不会用约分或保护性算子掩盖非法运算。最终模型和 Pareto 候选均保存原始树。预测遇到实际非法输入会报错；已声明范围之外的有限预测仍允许，声明范围并非预测访问控制。
+
+这仍是有限点筛查，不能证明任意连续区间内没有极点。`diagnostics_["domain_audit"]` 保存实际范围、显式点数量、探针数量和点集哈希；`domain_rejections` 统计被域检查拒绝的系数试算次数，不等于唯一树数。
+
+复杂结构初始化最多保存 512 个特征，包括复合函数、变量乘积/比值、带偏置的对数或平方根；随后进行最多三项的稀疏组合和有限公共分母搜索。它不接收目标公式或测试标签，候选仍受量纲、节点数、深度和普通评价器约束。`structured_initialization` 是新增日志阶段，`structured_search` 记录特征求值、线性子问题和结构提议数。它增加额外计算量，`max_evaluations` 仍只限制普通评价器中的唯一树数。
 
 ## 输出与数据划分
 

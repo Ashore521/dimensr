@@ -49,6 +49,8 @@ def main(argv=None):
     fit.add_argument("--target", required=True)
     fit.add_argument("--metadata", help="JSON: feature_names, feature_units, target_units, constant_units, extra_units")
     fit.add_argument("--validation", help="Optional independent validation CSV with the same columns")
+    fit.add_argument("--domain", help="Unlabelled CSV of additional permitted input points to audit during training")
+    fit.add_argument("--input-bounds", help="JSON array of finite [lower, upper] input bounds in feature order")
     fit.add_argument("--output", default="outputs/model.json")
     pred = sub.add_parser("predict", help="Predict using a saved JSON model")
     pred.add_argument("--model", required=True)
@@ -108,6 +110,10 @@ def main(argv=None):
             if args.validation:
                 xv, yv, _ = read_csv(args.validation, args.target, names)
                 validation = {"X_val": xv, "y_val": yv}
+            if args.domain:
+                validation["X_domain"] = read_csv(args.domain, features=names)[0]
+            if args.input_bounds:
+                validation["input_bounds"] = json.loads(Path(args.input_bounds).read_text(encoding="utf-8-sig"))
         model = DimenSRRegressor(cfg, **metadata)
         history = []
 

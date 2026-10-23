@@ -4,6 +4,10 @@
 
 [中文使用说明](docs/README.zh-CN.md) · [Algorithm](docs/ALGORITHM.md) · [Source mapping](docs/SOURCES.md) · [Experiment protocol](docs/EXPERIMENTS.md) · [Acceptance results](docs/ACCEPTANCE_RESULTS.zh-CN.md)
 
+[Version 0.3 boundary/search results](docs/BOUNDARY_SEARCH_RESULTS.zh-CN.md): 54 completed
+fits; improved strict numerical recovery on the small study, with remaining
+composition-search failures and an explicit extrapolation-domain counterexample.
+
 DimenSR discovers analytic relationships from numeric data and supplied physical units. It implements the proposed RNN–GP workflow in a small, independent PyTorch package, drawing on PhySO and DSO and the accompanying literature. It is an experimental algorithm, not an official release of either upstream project. Comparative superiority and research novelty have not been established.
 
 ## Install
@@ -54,6 +58,13 @@ restored = DimenSRRegressor.load("force_model.json")
 
 The estimator provides `fit`, `predict`, `score`, scikit-learn parameter cloning, `expression_`, `pareto_front_`, `history_`, and `diagnostics_`. `expression_` is a SymPy display expression; predictions use the original tree and its strict numerical domains. It does not include confidence intervals. JSON files store inference models, not resumable optimizer states.
 
+Version 0.3 checks every intermediate operation and probes training-range endpoints,
+zero when in range, and bounded corner combinations. Pass `fit(..., input_bounds=...,
+X_domain=...)` to declare additional valid input ranges or unlabelled points.
+For coupled/categorical domains, disable `boundary_probes` and set
+`domain_probe_count=0`, then provide permitted `X_domain` points only.
+Finite probes are **not a continuous-domain proof**. See the [domain API](docs/README.zh-CN.md#声明合法输入域).
+
 ## Fit your data
 
 ```bash
@@ -70,11 +81,13 @@ By default, `fit` makes a reproducible 80/20 split. Constants, search rewards an
 - Exact rational unit checking, completion-aware generation masks and same-unit subtree replacement.
 - GRU token and legal unit-split probabilities trained by a risk-seeking policy gradient; separate, diverse GP elite imitation.
 - Typed mutation/crossover with inherited constants, additive seeds, persistent elites and bounded duplicate retries.
+- Bounded, unit-checked composite-feature and sparse common-denominator initialization using training targets only (`structured_seeds=True`).
 - Domain-aware constant starts, exact affine coefficient subproblems and bounded elite polishing.
 - Accuracy/size/Pareto-aware candidate screening, retaining a requested 30% or at least 50 unique valid trees when available.
 - NSGA-II over training error and mixed complexity; optional size-density adjustment of crowding distance.
 - A reproducible Rademacher estimate for an explicit local Jacobian output ball, normalized for mixed-complexity selection. This is **not a certified generalization bound for symbolic regression**.
 - Reserved NSGA-II evaluation budget; optional output bounds and training-only numerical-domain probes.
+- Strict intermediate-operation checks, automatic boundary probes, and explicit unlabelled input-domain declarations.
 - Validation-based final model selection, portable JSON models, CLI, ablations, tests and CI.
 
 Generation uses a finite unit catalog built from supplied units and a documented one-step closure. Some dimensionally legal expressions are outside this catalog. Supply `extra_units` or change search limits when needed; see [algorithm details](docs/ALGORITHM.md). Unsupported numerical domains are rejected rather than rewritten using protected operators.

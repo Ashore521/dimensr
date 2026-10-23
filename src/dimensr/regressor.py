@@ -17,6 +17,7 @@ from .evaluation import Evaluator, Candidate
 from .genetics import fitted_offspring
 from .pareto import first_front, selection_order
 from .seeding import typed_seeds
+from .structure import structured_seeds
 
 
 def _unique(candidates):
@@ -69,7 +70,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         self.feature_names = feature_names
         self.extra_units = extra_units
 
-    def fit(self, X, y, *, X_val=None, y_val=None, callback=None):
+    def fit(self, X, y, *, X_val=None, y_val=None, X_domain=None, input_bounds=None, callback=None):
         # Remove prior fitted state before a refit, including a failed refit.
         for name in list(vars(self)):
             if name.endswith("_"):
@@ -112,7 +113,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
         constants = tuple(dict.fromkeys(physical_constants)) if cfg.use_units else ((ZERO,) if physical_constants else ())
         grammar = Grammar(units, target, constants, cfg.operators, cfg.max_nodes, cfg.max_depth,
                           extra if cfg.use_units else ())
-        evaluator = Evaluator(X, y, cfg)
+        evaluator = Evaluator(X, y, cfg, input_bounds=input_bounds, X_domain=X_domain)
         policy = Policy(len(grammar.tokens), cfg.hidden_size, cfg.learning_rate, cfg.random_state) if cfg.use_rnn else None
         self.history_ = []
         self.policy_ = policy
@@ -170,6 +171,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
             return survivors, children
 
         population, basis = [], []
+        structure_diagnostics = {}
         if cfg.linear_seeds:
             seed_limit = min(stage_one_limit // 4, cfg.population_size * 3)
             for tree in typed_seeds(grammar, rng):
@@ -183,6 +185,20 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
             population = _diverse(population, cfg.population_size, cfg.elite_fraction)
             if population:
                 record("initialization", 0, population)
+
+        if cfg.structured_seeds:
+            allowance = min(cfg.population_size * 2, max(0, stage_one_limit // 4))
+            proposals, structure_diagnostics = structured_seeds(grammar, X, y, allowance)
+            stop = min(stage_one_limit, evaluator.calls + allowance)
+            for tree, constants_start in proposals:
+                if evaluator.calls >= stop:
+                    break
+                candidate = evaluator(tree, constants_start)
+                if candidate is not None:
+                    population.append(candidate)
+            population = _diverse(population, cfg.population_size, cfg.elite_fraction)
+            if population:
+                record("structured_initialization", 0, population)
 
         # Stage one: repeated neural population seeding and open GP search.
         for epoch in range(cfg.epochs):
@@ -280,6 +296,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
                              "stage_one_limit": stage_one_limit,
                              "variation_attempts": dict(variation_attempts), "variation_novel": dict(variation_novel),
                              "output_bounds": cfg.output_bounds,
+                             "structured_search": structure_diagnostics,
                              **evaluator.diagnostics(),
                              "elapsed_seconds": time.monotonic() - start}
         return self
@@ -301,7 +318,7 @@ class DimenSRRegressor(RegressorMixin, BaseEstimator):
     def save(self, path):
         """Save an inference model as portable JSON, without executable pickle data."""
         check_is_fitted(self, "best_")
-        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.2.0",
+        data = {"format": "dimensr", "schema_version": 1, "package_version": "0.3.0",
                 "config": asdict(self.config_), "n_features": self.n_features_in_,
                 "feature_names": self.feature_names_, "feature_units": [encode(u) for u in self.feature_units_],
                 "target_units": encode(self.target_units_), "constant_units": [encode(u) for u in self.constant_units_],

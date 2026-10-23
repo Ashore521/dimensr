@@ -36,6 +36,8 @@ class SearchConfig:
     variation_attempts: int = 4
     elite_fraction: float = 0.25
     linear_seeds: bool = True
+    structured_seeds: bool = True
+    boundary_probes: bool = True
     output_bounds: tuple | None = None
     domain_probe_count: int = 32
     validation_fraction: float = 0.2
@@ -48,7 +50,8 @@ class SearchConfig:
     use_rademacher: bool = True
 
     def validate(self):
-        for name in ("use_rnn", "use_gp", "use_units", "use_size_diversity", "use_rademacher", "linear_seeds"):
+        for name in ("use_rnn", "use_gp", "use_units", "use_size_diversity", "use_rademacher", "linear_seeds",
+                     "structured_seeds", "boundary_probes"):
             if not isinstance(getattr(self, name), bool):
                 raise ValueError(f"{name} must be a boolean.")
         for name in ("population_size", "epochs", "max_nodes", "max_depth", "hidden_size",

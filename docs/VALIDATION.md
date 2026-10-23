@@ -1,5 +1,14 @@
 # Validation record
 
+Version **0.3.0**, 2026-10-23: **79 tests passed**; wheel/sdist built and an isolated
+wheel installation passed the declared-domain CLI and save/load smoke check.
+The [boundary and search study](BOUNDARY_SEARCH_RESULTS.zh-CN.md) completed 54/54
+fits and independently replayed 941 saved trees. Strict recovery was 12/18 for
+0.3 versus 2/18 for frozen 0.2. Registered finite-probe final domain failures were
+0/18 versus 5/18; a separate extrapolation pole counterexample remains documented.
+One fixed-seed repeat reproduced all non-timing model state and predictions.
+Historical results below retain their original versions and scopes.
+
 Historical development validation date: **2026-10-17**. These are actual runs,
 not expected scores. A subsequent **2026-10-18** [acceptance report](ACCEPTANCE_RESULTS.zh-CN.md)
 adds a limited, adapted-budget comparison with pinned upstream PhySO; DSO and
